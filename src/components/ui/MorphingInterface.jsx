@@ -44,8 +44,10 @@ const MorphingInterface = () => {
               : "fixed bottom-10 rounded-[2rem]"
           )}
           style={{
-            width: isScrolled ? "auto" : "64px",
-            height: isScrolled ? "auto" : "40px",
+            // Responsive sizing: full width on mobile (w-[90%]), smaller on desktop
+            width: isScrolled ? "auto" : "90%",
+            maxWidth: isScrolled ? "none" : "500px",
+            height: isScrolled ? "auto" : "50px",
           }}
           transition={{ type: "spring", stiffness: 120, damping: 20, mass: 1 }}
         >
@@ -58,7 +60,7 @@ const MorphingInterface = () => {
                 exit={{ opacity: 0 }}
                 className="flex items-center gap-2 px-2 py-2"
               >
-                <div className="px-5 py-2 rounded-full bg-black/20 border border-white/5">
+                <div className="px-5 py-2 rounded-full bg-black/20 border border-white/5 hidden md:block">
                   <span className="font-mono text-xs font-bold text-cyan-400 tracking-widest">
                     KAVYABUILDS
                   </span>
@@ -70,7 +72,7 @@ const MorphingInterface = () => {
                       onClick={() => handleScrollTo(item.toLowerCase())}
                       onMouseEnter={() => setActiveTab(item)}
                       onMouseLeave={() => setActiveTab(null)}
-                      className="relative px-5 py-2 rounded-full text-xs font-mono font-medium text-gray-400 hover:text-white transition-colors cursor-pointer"
+                      className="relative px-4 md:px-5 py-2 rounded-full text-[10px] md:text-xs font-mono font-medium text-gray-400 hover:text-white transition-colors cursor-pointer"
                     >
                       {activeTab === item && (
                         <motion.div
@@ -95,8 +97,11 @@ const MorphingInterface = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => handleScrollTo("work")}
-                className="w-full h-full flex flex-col items-center justify-center gap-1 cursor-pointer group"
+                className="w-full h-full flex items-center justify-center gap-2 cursor-pointer group"
               >
+                <span className="text-white font-mono text-xs tracking-widest">
+                  START EXPLORING
+                </span>
                 <ArrowDown className="w-4 h-4 text-white/70 group-hover:text-cyan-400 transition-colors" />
               </motion.button>
             )}

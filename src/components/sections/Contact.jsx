@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Canvas } from "@react-three/fiber";
 import { Mail, MapPin, Send, AlertCircle, ArrowRight } from "lucide-react";
 import ContactGlobe from "../3d/ContactGlobe";
-import useIsMobile from "../../hooks/useIsMobile"; // <--- ADDED MISSING IMPORT
+import useIsMobile from "../../hooks/useIsMobile";
 
 const Contact = () => {
   const isMobile = useIsMobile();
@@ -14,7 +14,6 @@ const Contact = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
   };
 
@@ -23,7 +22,7 @@ const Contact = () => {
       id="contact"
       className="min-h-screen bg-[#050505] flex items-center justify-center relative overflow-hidden"
     >
-      {/* 3D BACKGROUND - OPTIMIZED: ONLY RENDERS ON DESKTOP */}
+      {/* 3D BACKGROUND - DESKTOP ONLY */}
       {!isMobile && (
         <div className="absolute inset-0 z-0 opacity-100 pointer-events-none">
           <Canvas camera={{ position: [0, 0, 4.5] }} dpr={[1, 1.5]}>
@@ -32,18 +31,20 @@ const Contact = () => {
         </div>
       )}
 
-      {/* REMOVED THE SECOND DUPLICATE CANVAS BLOCK THAT WAS HERE */}
-
-      <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 px-6 items-center relative z-10">
+      <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 px-6 items-center relative z-10 py-12 md:py-0">
+        {/* TEXT CONTENT */}
         <div className="order-1">
           <div className="font-mono text-cyan-500 text-xs mb-4">
             /// ESTABLISH_CONNECTION
           </div>
-          <h2 className="text-6xl md:text-7xl font-bold text-white mb-8 tracking-tight leading-[0.9]">
-            READY TO
-            <br />
-            COLLABORATE?
+
+          {/* UPDATED: FORCED LINE BREAKS FOR MOBILE */}
+          <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 tracking-tight leading-[1.1] md:leading-[0.9]">
+            <span className="block">READY</span>
+            <span className="block">TO</span>
+            <span className="block">COLLABORATE?</span>
           </h2>
+
           <p className="text-gray-400 leading-relaxed mb-8 max-w-sm">
             I am currently available for select freelance opportunities. If you
             have a project that requires high-end engineering, signal me.
@@ -58,7 +59,8 @@ const Contact = () => {
           </div>
         </div>
 
-        <div className="flex justify-center lg:justify-start pl-12 w-full">
+        {/* FORM */}
+        <div className="flex justify-center lg:justify-start pl-0 lg:pl-12 w-full">
           <div className="w-full max-w-md bg-gradient-to-br from-cyan-900/10 to-blue-900/10 backdrop-blur-2xl border border-cyan-500/20 p-8 rounded-2xl relative group shadow-[0_0_50px_rgba(0,240,255,0.1)] overflow-hidden">
             <div className="absolute inset-0 border border-cyan-500/10 rounded-2xl pointer-events-none" />
 
@@ -109,7 +111,7 @@ const Contact = () => {
                 </div>
                 <div className="space-y-2 group/input">
                   <label className="text-xs font-mono text-gray-500">
-                    PROJECT DETAILS
+                    MESSAGE
                   </label>
                   <textarea
                     {...register("message", { required: true })}

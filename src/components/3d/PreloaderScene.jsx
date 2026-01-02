@@ -1,67 +1,52 @@
 import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import useIsMobile from "../../hooks/useIsMobile";
 
 const PreloaderScene = () => {
-  const group = useRef();
-  const isMobile = useIsMobile();
+  const outerRef = useRef();
+  const innerRef = useRef();
+  const coreRef = useRef();
 
   useFrame((state, delta) => {
-    if (group.current) {
-      group.current.rotation.y += delta * 0.8;
-      group.current.rotation.x += delta * 0.4;
+    if (outerRef.current) {
+      outerRef.current.rotation.x += delta * 0.5;
+      outerRef.current.rotation.y += delta * 0.6;
+    }
+    if (innerRef.current) {
+      innerRef.current.rotation.x -= delta * 0.5; // Reverse rotation
+      innerRef.current.rotation.y -= delta * 0.4;
+    }
+    if (coreRef.current) {
+      coreRef.current.rotation.x += delta * 1;
+      coreRef.current.rotation.z += delta * 1;
     }
   });
 
-  if (isMobile) {
-    // MOBILE: Simple Single Wireframe Cube (Zero Post-Processing)
-    return (
-      <group ref={group} scale={1.5}>
-        <mesh>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshBasicMaterial wireframe color="#00F0FF" />
-        </mesh>
-      </group>
-    );
-  }
-
-  // DESKTOP: Full Tesseract + Bloom
   return (
-    <>
-      <group ref={group} scale={0.9}>
-        <mesh>
-          <icosahedronGeometry args={[1.4, 1]} />
-          <meshBasicMaterial
-            wireframe
-            color="#00F0FF"
-            transparent
-            opacity={0.3}
-          />
-        </mesh>
-        <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>
-          <icosahedronGeometry args={[0.9, 0]} />
-          <meshBasicMaterial
-            wireframe
-            color="white"
-            transparent
-            opacity={0.15}
-          />
-        </mesh>
-        <mesh>
-          <octahedronGeometry args={[0.4, 0]} />
-          <meshBasicMaterial color="#00F0FF" toneMapped={false} />
-        </mesh>
-      </group>
-      <EffectComposer>
-        <Bloom
-          luminanceThreshold={0.2}
-          luminanceSmoothing={0.9}
-          height={300}
-          intensity={1.5}
+    <group scale={1}>
+      {/* 1. Outer Wireframe Box */}
+      <mesh ref={outerRef}>
+        <boxGeometry args={[2.5, 2.5, 2.5]} />
+        <meshBasicMaterial
+          wireframe
+          color="#00F0FF"
+          opacity={0.5}
+          transparent
         />
-      </EffectComposer>
-    </>
+      </mesh>
+
+      {/* 2. Inner Wireframe Box (Creates Tesseract effect) */}
+      <mesh ref={innerRef}>
+        <boxGeometry args={[1.5, 1.5, 1.5]} />
+        <meshBasicMaterial wireframe color="white" opacity={0.3} transparent />
+      </mesh>
+
+      {/* 3. Solid Core */}
+      <mesh ref={coreRef}>
+        <octahedronGeometry args={[0.5, 0]} />
+        <meshBasicMaterial color="#00F0FF" />
+      </mesh>
+    </group>
   );
 };
+
 export default PreloaderScene;
