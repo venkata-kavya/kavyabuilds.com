@@ -3,9 +3,9 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, ContactShadows } from "@react-three/drei";
 import { motion, AnimatePresence } from "framer-motion";
 import { Box, Cpu, Globe, Zap, Move, Minimize, Figma } from "lucide-react";
-import useIsMobile from "../../hooks/useIsMobile"; // Ensure this path is correct!
+import useIsMobile from "../../hooks/useIsMobile";
 
-// --- 1. LIGHTWEIGHT MOBILE CUBE (No heavy physics/shadows) ---
+// --- 1. LIGHTWEIGHT MOBILE CUBE (Simple Rotation) ---
 const MobileLootCube = ({ onClick }) => {
   const mesh = useRef(null);
 
@@ -24,49 +24,68 @@ const MobileLootCube = ({ onClick }) => {
   );
 };
 
-// --- 2. HEAVY DESKTOP CUBE (Physics, Shadows, Interaction) ---
+// --- 2. HEAVY DESKTOP CUBE (Tesseract Rotation Logic) ---
 const DesktopLootCube = ({ onClick, clicking }) => {
-  const mesh = useRef(null);
+  const groupRef = useRef(null); // Handles Hover/Click scales
+  const outerRef = useRef(null); // Individual Rotation
+  const innerRef = useRef(null); // Individual Rotation
+  const coreRef = useRef(null); // Individual Rotation
 
   useFrame((state, delta) => {
-    if (mesh.current) {
-      mesh.current.rotation.x += delta * 0.2;
-      mesh.current.rotation.y += delta * 0.2;
+    // A. TESSERACT ROTATION (Matches Preloader)
+    if (outerRef.current) {
+      outerRef.current.rotation.x += delta * 0.5;
+      outerRef.current.rotation.y += delta * 0.6;
+    }
+    if (innerRef.current) {
+      innerRef.current.rotation.x -= delta * 0.5; // Counter-rotate
+      innerRef.current.rotation.y -= delta * 0.4;
+    }
+    if (coreRef.current) {
+      coreRef.current.rotation.x += delta * 1; // Fast spin core
+      coreRef.current.rotation.z += delta * 1;
+    }
 
-      // Interactive "squish" on click
+    // B. INTERACTIVE SQUISH (Applied to Parent Group)
+    if (groupRef.current) {
       const targetScale = clicking ? 0.8 : 1;
       const speed = 15;
-      mesh.current.scale.x +=
-        (targetScale - mesh.current.scale.x) * speed * delta;
-      mesh.current.scale.y +=
-        (targetScale - mesh.current.scale.y) * speed * delta;
-      mesh.current.scale.z +=
-        (targetScale - mesh.current.scale.z) * speed * delta;
+      groupRef.current.scale.x +=
+        (targetScale - groupRef.current.scale.x) * speed * delta;
+      groupRef.current.scale.y +=
+        (targetScale - groupRef.current.scale.y) * speed * delta;
+      groupRef.current.scale.z +=
+        (targetScale - groupRef.current.scale.z) * speed * delta;
     }
   });
 
   return (
     <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
       <group
-        ref={mesh}
+        ref={groupRef}
         onClick={onClick}
         onPointerOver={() => (document.body.style.cursor = "pointer")}
         onPointerOut={() => (document.body.style.cursor = "auto")}
       >
-        <mesh>
+        {/* Outer Wireframe (BLUE) */}
+        <mesh ref={outerRef}>
           <boxGeometry args={[2.5, 2.5, 2.5]} />
           <meshBasicMaterial wireframe color="#00F0FF" />
         </mesh>
-        <mesh>
+
+        {/* Inner Wireframe (WHITE) */}
+        <mesh ref={innerRef}>
           <boxGeometry args={[1.5, 1.5, 1.5]} />
           <meshBasicMaterial
             wireframe
             color="white"
-            opacity={0.3}
+            opacity={0.4}
             transparent
           />
         </mesh>
-        <mesh>
+
+        {/* Core Solid (BLUE) */}
+        <mesh ref={coreRef}>
           <boxGeometry args={[0.8, 0.8, 0.8]} />
           <meshStandardMaterial
             color="#00F0FF"
@@ -75,6 +94,7 @@ const DesktopLootCube = ({ onClick, clicking }) => {
             toneMapped={false}
           />
         </mesh>
+
         <ContactShadows
           position={[0, -3, 0]}
           opacity={0.5}
@@ -91,9 +111,6 @@ const DesktopLootCube = ({ onClick, clicking }) => {
 const Arsenal = () => {
   const [lootIndex, setLootIndex] = useState(0);
   const [clicking, setClicking] = useState(false);
-
-  // This hook call caused the error before.
-  // Ensure "src/hooks/useIsMobile.js" exists!
   const isMobile = useIsMobile();
 
   const inventory = [
@@ -164,7 +181,6 @@ const Arsenal = () => {
       id="arsenal"
       className="min-h-screen bg-[#050505] flex items-center justify-center relative overflow-hidden py-24"
     >
-      {/* Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none" />
 
       <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 px-6 items-center">

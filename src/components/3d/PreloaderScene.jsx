@@ -12,7 +12,7 @@ const PreloaderScene = () => {
       outerRef.current.rotation.y += delta * 0.6;
     }
     if (innerRef.current) {
-      innerRef.current.rotation.x -= delta * 0.5; // Reverse rotation
+      innerRef.current.rotation.x -= delta * 0.5;
       innerRef.current.rotation.y -= delta * 0.4;
     }
     if (coreRef.current) {
@@ -22,8 +22,8 @@ const PreloaderScene = () => {
   });
 
   return (
-    <group scale={1}>
-      {/* 1. Outer Wireframe Box */}
+    <group scale={0.6}>
+      {/* 1. Outer Wireframe Box (BLUE) */}
       <mesh ref={outerRef}>
         <boxGeometry args={[2.5, 2.5, 2.5]} />
         <meshBasicMaterial
@@ -34,16 +34,16 @@ const PreloaderScene = () => {
         />
       </mesh>
 
-      {/* 2. Inner Wireframe Box (Creates Tesseract effect) */}
+      {/* 2. Inner Wireframe Box (WHITE) */}
       <mesh ref={innerRef}>
         <boxGeometry args={[1.5, 1.5, 1.5]} />
-        <meshBasicMaterial wireframe color="white" opacity={0.3} transparent />
+        <meshBasicMaterial wireframe color="white" opacity={0.4} transparent />
       </mesh>
 
-      {/* 3. Solid Core */}
+      {/* 3. Solid Core (BLUE) */}
       <mesh ref={coreRef}>
         <octahedronGeometry args={[0.5, 0]} />
-        <meshBasicMaterial color="#00F0FF" />
+        <meshBasicMaterial color="#00F0FF" toneMapped={false} />
       </mesh>
     </group>
   );

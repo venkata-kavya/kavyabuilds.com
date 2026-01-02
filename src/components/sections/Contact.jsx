@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Canvas } from "@react-three/fiber";
-import { Mail, MapPin, Send, AlertCircle, ArrowRight } from "lucide-react";
+import { Instagram, MapPin, Send, AlertCircle, ArrowRight } from "lucide-react";
 import ContactGlobe from "../3d/ContactGlobe";
 import useIsMobile from "../../hooks/useIsMobile";
 
@@ -14,6 +14,7 @@ const Contact = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
   };
 
@@ -38,11 +39,13 @@ const Contact = () => {
             /// ESTABLISH_CONNECTION
           </div>
 
-          {/* UPDATED: FORCED LINE BREAKS FOR MOBILE */}
-          <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 tracking-tight leading-[1.1] md:leading-[0.9]">
-            <span className="block">READY</span>
-            <span className="block">TO</span>
-            <span className="block">COLLABORATE?</span>
+          {/* UPDATED: CATCHY & STACKED TITLE */}
+          <h2 className="text-6xl md:text-7xl font-bold text-white mb-8 tracking-tight leading-[0.9] md:leading-[0.85]">
+            <span className="block">DEPLOY</span>
+            <span className="block">THE</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              FUTURE.
+            </span>
           </h2>
 
           <p className="text-gray-400 leading-relaxed mb-8 max-w-sm">
@@ -51,7 +54,7 @@ const Contact = () => {
           </p>
           <div className="flex flex-col gap-4 font-mono text-sm">
             <div className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors cursor-pointer">
-              <Mail size={16} /> hello@kavyabuilds.com
+              <Instagram size={16} /> @kavyabuilds
             </div>
             <div className="flex items-center gap-3 text-gray-400">
               <MapPin size={16} /> Hyderabad, IN

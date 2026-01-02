@@ -3,22 +3,37 @@ import Spline from "@splinetool/react-spline";
 import { motion } from "framer-motion";
 import useIsMobile from "../../hooks/useIsMobile";
 
-// Optimized Spline Component
+// Optimized Spline Component (Desktop Only)
 const SplineScene = memo(({ url, onLoad }) => (
   <Spline scene={url} onLoad={onLoad} renderOnDemand={true} />
 ));
 
-// Lightweight Mobile Aurora
-const Aurora = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+// --- NEW HIGH-QUALITY MOBILE AURORA ---
+const MobileAurora = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
+    {/* 1. Deep Base Glow (Static) */}
+    <div className="absolute top-0 left-0 w-full h-full bg-[#050505]" />
+
+    {/* 2. Moving Cyan Orb */}
     <div
-      className="absolute top-[-50%] right-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(0,240,255,0.15),transparent_50%)] animate-spin-slow"
+      className="absolute top-[-10%] left-[-20%] w-[80vw] h-[80vw] bg-[#00F0FF] rounded-full opacity-20 blur-[100px] mix-blend-screen animate-blob"
       style={{ animationDuration: "20s" }}
     />
+
+    {/* 3. Moving Violet Orb (Adds Depth) */}
     <div
-      className="absolute bottom-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(0,209,160,0.1),transparent_50%)] animate-spin-slow"
-      style={{ animationDuration: "30s", animationDirection: "reverse" }}
+      className="absolute top-[40%] right-[-20%] w-[80vw] h-[80vw] bg-[#7000FF] rounded-full opacity-20 blur-[120px] mix-blend-screen animate-blob animation-delay-2000"
+      style={{ animationDuration: "25s", animationDirection: "reverse" }}
     />
+
+    {/* 4. Moving Teal Orb (Highlight) */}
+    <div
+      className="absolute bottom-[-20%] left-[20%] w-[90vw] h-[90vw] bg-[#00D1A0] rounded-full opacity-15 blur-[100px] mix-blend-screen animate-blob animation-delay-4000"
+      style={{ animationDuration: "30s" }}
+    />
+
+    {/* 5. Noise Overlay (Optional Texture for "Premium" feel) */}
+    <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat" />
   </div>
 );
 
@@ -28,20 +43,22 @@ const Hero = () => {
   const SPLINE_SCENE_URL =
     "https://prod.spline.design/L3MeEDFs710JuJgp/scene.splinecode";
 
-  // Auto-set loaded true on mobile since we skip Spline loading
   React.useEffect(() => {
     if (isMobile) setIsLoaded(true);
   }, [isMobile]);
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-[#050505]">
-      <div className="absolute inset-0 portal-glow" />
+      {/* Background Glow/Portal */}
+      <div className="absolute inset-0 portal-glow z-0" />
 
-      {/* Mobile Optimization: Aurora instead of 3D Scene */}
-      {isMobile && <Aurora />}
+      {/* MOBILE OPTIMIZATION: High-Quality Aurora */}
+      {isMobile && <MobileAurora />}
 
       <div className="relative z-10 h-full max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-2 items-center px-6 md:px-12">
+        {/* TEXT CONTENT (Left) */}
         <div className="pointer-events-none order-2 lg:order-1 z-20 mix-blend-difference pb-24 lg:pb-0">
+          {/* Status Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : {}}
@@ -57,6 +74,8 @@ const Hero = () => {
               </span>
             </div>
           </motion.div>
+
+          {/* Main Title */}
           <motion.h1
             initial={{ y: 100, opacity: 0 }}
             animate={isLoaded ? { y: 0, opacity: 1 } : {}}
@@ -69,6 +88,8 @@ const Hero = () => {
               REALITY.
             </span>
           </motion.h1>
+
+          {/* Subtitle */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isLoaded ? { opacity: 1 } : {}}
@@ -88,7 +109,7 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        {/* Desktop Only: Heavy Spline Scene */}
+        {/* DESKTOP ONLY: Heavy Spline Scene */}
         {!isMobile && (
           <div className="relative w-full h-[50vh] lg:h-full order-1 lg:order-2 flex items-center justify-center lg:justify-end z-10">
             {!isLoaded && (

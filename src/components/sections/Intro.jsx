@@ -18,6 +18,7 @@ const Intro = () => {
       ref={container}
       className="h-screen flex items-center justify-center bg-[#050505] overflow-hidden relative"
     >
+      {/* Background Marquee */}
       <div className="absolute inset-0 flex flex-col justify-center opacity-20 pointer-events-none select-none">
         <motion.div
           style={{ x }}
@@ -26,12 +27,17 @@ const Intro = () => {
           System Architecture • WebGL • Creative Dev •
         </motion.div>
       </div>
+
+      {/* Main Heading */}
       <motion.div
         style={{ scale, opacity }}
         className="relative z-10 text-center"
       >
-        <h1 className="text-[12vw] font-bold leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-900 drop-shadow-[0_0_40px_rgba(255,255,255,0.1)]">
-          HI, I'M KAVYA.
+        <h1 className="text-[12vw] font-bold leading-none tracking-tighter text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+          HI, I'M{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+            KAVYA.
+          </span>
         </h1>
       </motion.div>
     </section>
