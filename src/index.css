@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+:root {
+  --void-black: #050505;
+  --neon-cyan: #00f0ff;
+  --neon-teal: #00d1a0;
+}
+
+/* ... rest of your CSS ... */
+
+@theme {
+  --font-sans: "Switzer", sans-serif;
+  --font-display: "Clash Display", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+body {
+  background-color: var(--void-black);
+  color: #e0e0e0;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* ACCESSIBILITY FIX: Only hide cursor on devices that HAVE a mouse */
+@media (hover: hover) and (pointer: fine) {
+  body,
+  a,
+  button,
+  input,
+  textarea {
+    cursor: none !important;
+  }
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--void-black);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--neon-cyan), var(--neon-teal));
+  border-radius: 2px;
+}
+
+.spline-mask {
+  mask-image: radial-gradient(circle at center, black 40%, transparent 70%);
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    black 40%,
+    transparent 70%
+  );
+}
+
+.portal-glow {
+  background: radial-gradient(
+    circle at 70% center,
+    rgba(0, 240, 255, 0.1) 0%,
+    rgba(5, 5, 5, 0) 60%
+  );
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.05);
+  text-stroke: 1px rgba(255, 255, 255, 0.05);
+}
+
+/* 3D CUBE SHAPES */
+.cube-container {
+  perspective: 1000px;
+}
+.cube {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  transform-style: preserve-3d;
+}
+.face {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: rgba(0, 240, 255, 0.05);
+  border: 4px solid #00f0ff;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+  backdrop-filter: blur(8px);
+}
+.front {
+  transform: rotateY(0deg) translateZ(75px);
+}
+.back {
+  transform: rotateY(180deg) translateZ(75px);
+}
+.right {
+  transform: rotateY(90deg) translateZ(75px);
+}
+.left {
+  transform: rotateY(-90deg) translateZ(75px);
+}
+.top {
+  transform: rotateX(90deg) translateZ(75px);
+}
+.bottom {
+  transform: rotateX(-90deg) translateZ(75px);
+}
