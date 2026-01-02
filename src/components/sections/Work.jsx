@@ -12,16 +12,19 @@ const Work = () => {
       title: "AURA",
       type: "iOS INSPIRED",
       img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop",
+      link: "https://aura-one-drab.vercel.app",
     },
     {
       title: "NEO BRUTAL",
       type: "ANTI-DESIGN",
       img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop",
+      link: "https://dorksense-three.vercel.app",
     },
     {
       title: "MOSAIC_OS",
       type: "APPLICATION",
       img: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop",
+      link: "https://mosaic-liart.vercel.app",
     },
   ];
 
@@ -33,6 +36,7 @@ const Work = () => {
     >
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
         <div className="w-full h-full flex items-center">
+          {/* Static Title Section */}
           <div className="w-[30%] md:w-[450px] h-full flex flex-col justify-center pl-16 md:pl-32 pr-8 z-10 bg-[#050505]/50 backdrop-blur-sm border-r border-white/5">
             <h2 className="text-6xl md:text-8xl font-semibold text-white tracking-tighter mb-4 leading-none">
               DEPLOYED
@@ -43,6 +47,8 @@ const Work = () => {
               /// DRAG_TO_NAVIGATE
             </p>
           </div>
+
+          {/* Horizontal Scroll Section */}
           <div className="flex-1 h-full flex items-center overflow-hidden">
             <motion.div style={{ x }} className="flex gap-12 px-12">
               {projects.map((p, i) => (
@@ -50,6 +56,7 @@ const Work = () => {
                   key={i}
                   className="relative w-[80vw] md:w-[600px] h-[50vh] md:h-[60vh] flex-shrink-0 group overflow-hidden border border-white/10 rounded-sm bg-[#111] cursor-pointer"
                 >
+                  {/* Background Image */}
                   <img
                     src={p.img}
                     alt={p.title}
@@ -57,12 +64,18 @@ const Work = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
 
-                  {/* HOVER ARROW */}
-                  <div className="absolute top-8 right-8 bg-white/10 p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-md border border-white/20 scale-50 group-hover:scale-100">
+                  {/* CLICKABLE LINK ARROW */}
+                  <a
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()} // Prevent card click conflict
+                    className="absolute top-8 right-8 bg-white/10 p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-md border border-white/20 scale-50 group-hover:scale-100 z-20 hover:bg-white/20 hover:border-cyan-400/50"
+                  >
                     <ArrowUpRight className="text-cyan-400 w-6 h-6" />
-                  </div>
+                  </a>
 
-                  {/* TITLE */}
+                  {/* Project Title & Type */}
                   <div className="absolute bottom-0 left-0 p-8 md:p-12">
                     <div className="font-mono text-sm text-cyan-400 mb-2">
                       {p.type}
