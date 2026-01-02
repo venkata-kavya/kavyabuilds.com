@@ -20,11 +20,13 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
     // Initialize Lenis for smooth inertial scrolling
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing
       smoothWheel: true,
+      touchMultiplier: 0,
       wheelMultiplier: 1.2,
     });
 

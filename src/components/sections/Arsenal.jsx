@@ -3,20 +3,48 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, ContactShadows } from "@react-three/drei";
 import { motion, AnimatePresence } from "framer-motion";
 import { Box, Cpu, Globe, Zap, Move, Minimize, Figma } from "lucide-react";
+import useIsMobile from "../../hooks/useIsMobile"; // Ensure this path is correct!
 
-const LootCube = ({ onClick, clicking }) => {
+// --- 1. LIGHTWEIGHT MOBILE CUBE (No heavy physics/shadows) ---
+const MobileLootCube = ({ onClick }) => {
   const mesh = useRef(null);
+
+  useFrame((state, delta) => {
+    if (mesh.current) {
+      mesh.current.rotation.x += delta * 0.6;
+      mesh.current.rotation.y += delta * 0.7;
+    }
+  });
+
+  return (
+    <mesh ref={mesh} onClick={onClick} scale={1.4}>
+      <boxGeometry args={[1.8, 1.8, 1.8]} />
+      <meshBasicMaterial wireframe color="#00F0FF" />
+    </mesh>
+  );
+};
+
+// --- 2. HEAVY DESKTOP CUBE (Physics, Shadows, Interaction) ---
+const DesktopLootCube = ({ onClick, clicking }) => {
+  const mesh = useRef(null);
+
   useFrame((state, delta) => {
     if (mesh.current) {
       mesh.current.rotation.x += delta * 0.2;
       mesh.current.rotation.y += delta * 0.2;
+
+      // Interactive "squish" on click
       const targetScale = clicking ? 0.8 : 1;
-      mesh.current.scale.lerp(
-        { x: targetScale, y: targetScale, z: targetScale },
-        0.1
-      );
+      const speed = 15;
+      mesh.current.scale.x +=
+        (targetScale - mesh.current.scale.x) * speed * delta;
+      mesh.current.scale.y +=
+        (targetScale - mesh.current.scale.y) * speed * delta;
+      mesh.current.scale.z +=
+        (targetScale - mesh.current.scale.z) * speed * delta;
     }
   });
+
   return (
     <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
       <group
@@ -59,9 +87,14 @@ const LootCube = ({ onClick, clicking }) => {
   );
 };
 
+// --- 3. MAIN ARSENAL SECTION ---
 const Arsenal = () => {
   const [lootIndex, setLootIndex] = useState(0);
   const [clicking, setClicking] = useState(false);
+
+  // This hook call caused the error before.
+  // Ensure "src/hooks/useIsMobile.js" exists!
+  const isMobile = useIsMobile();
 
   const inventory = [
     {
@@ -131,22 +164,37 @@ const Arsenal = () => {
       id="arsenal"
       className="min-h-screen bg-[#050505] flex items-center justify-center relative overflow-hidden py-24"
     >
+      {/* Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none" />
+
       <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 px-6 items-center">
-        <div className="h-[500px] w-full relative">
+        {/* LEFT: 3D Canvas */}
+        <div className="h-[400px] md:h-[500px] w-full relative">
           <div className="absolute top-0 left-0 font-mono text-xs text-cyan-500">
-            /// MY STACK
+            /// INTERACTIVE_LOOT_BOX
           </div>
-          <Canvas camera={{ position: [0, 0, 6] }}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1} />
-            <LootCube onClick={handleLoot} clicking={clicking} />
+
+          <Canvas
+            camera={{ position: [0, 0, 6] }}
+            dpr={[1, isMobile ? 1 : 1.5]}
+          >
+            {!isMobile && <ambientLight intensity={0.5} />}
+            {!isMobile && <pointLight position={[10, 10, 10]} intensity={1} />}
+
+            {isMobile ? (
+              <MobileLootCube onClick={handleLoot} />
+            ) : (
+              <DesktopLootCube onClick={handleLoot} clicking={clicking} />
+            )}
           </Canvas>
+
           <div className="absolute bottom-4 left-0 right-0 text-center font-mono text-xs text-gray-500 tracking-widest">
-            [ CLICK TO DEPLOY ]
+            [ {isMobile ? "TAP" : "CLICK"} TO DEPLOY ]
           </div>
         </div>
-        <div className="flex justify-center lg:justify-start pl-12 md:pl-40 h-[400px] items-center">
+
+        {/* RIGHT: Data Card */}
+        <div className="flex justify-center lg:justify-start pl-0 md:pl-12 lg:pl-40 h-[400px] items-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={lootIndex}
@@ -154,7 +202,7 @@ const Arsenal = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="w-96 bg-gradient-to-br from-white/10 to-black/80 backdrop-blur-2xl border border-white/10 p-8 rounded-xl shadow-2xl relative overflow-hidden"
+              className="w-full max-w-sm bg-gradient-to-br from-white/10 to-black/80 backdrop-blur-2xl border border-white/10 p-8 rounded-xl shadow-2xl relative overflow-hidden"
             >
               <div className="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
                 <div className="p-3 bg-black/40 rounded-lg border border-white/10 text-cyan-400">
@@ -192,4 +240,5 @@ const Arsenal = () => {
     </section>
   );
 };
+
 export default Arsenal;

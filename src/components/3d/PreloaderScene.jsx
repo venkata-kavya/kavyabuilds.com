@@ -1,9 +1,11 @@
 import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const PreloaderScene = () => {
   const group = useRef();
+  const isMobile = useIsMobile();
 
   useFrame((state, delta) => {
     if (group.current) {
@@ -12,6 +14,19 @@ const PreloaderScene = () => {
     }
   });
 
+  if (isMobile) {
+    // MOBILE: Simple Single Wireframe Cube (Zero Post-Processing)
+    return (
+      <group ref={group} scale={1.5}>
+        <mesh>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshBasicMaterial wireframe color="#00F0FF" />
+        </mesh>
+      </group>
+    );
+  }
+
+  // DESKTOP: Full Tesseract + Bloom
   return (
     <>
       <group ref={group} scale={0.9}>

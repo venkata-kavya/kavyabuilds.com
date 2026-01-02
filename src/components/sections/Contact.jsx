@@ -3,8 +3,10 @@ import { useForm } from "react-hook-form";
 import { Canvas } from "@react-three/fiber";
 import { Mail, MapPin, Send, AlertCircle, ArrowRight } from "lucide-react";
 import ContactGlobe from "../3d/ContactGlobe";
+import useIsMobile from "../../hooks/useIsMobile"; // <--- ADDED MISSING IMPORT
 
 const Contact = () => {
+  const isMobile = useIsMobile();
   const {
     register,
     handleSubmit,
@@ -21,12 +23,16 @@ const Contact = () => {
       id="contact"
       className="min-h-screen bg-[#050505] flex items-center justify-center relative overflow-hidden"
     >
-      {/* 3D BACKGROUND */}
-      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 3] }}>
-          <ContactGlobe />
-        </Canvas>
-      </div>
+      {/* 3D BACKGROUND - OPTIMIZED: ONLY RENDERS ON DESKTOP */}
+      {!isMobile && (
+        <div className="absolute inset-0 z-0 opacity-100 pointer-events-none">
+          <Canvas camera={{ position: [0, 0, 4.5] }} dpr={[1, 1.5]}>
+            <ContactGlobe />
+          </Canvas>
+        </div>
+      )}
+
+      {/* REMOVED THE SECOND DUPLICATE CANVAS BLOCK THAT WAS HERE */}
 
       <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 px-6 items-center relative z-10">
         <div className="order-1">
