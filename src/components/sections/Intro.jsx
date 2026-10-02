@@ -60,7 +60,7 @@ const Intro = () => {
           transition={{ duration: 0.8 }}
           className="mb-8"
         >
-          <span className="font-mono text-[9px] md:text-[10px] tracking-[0.35em] uppercase text-cyan-300">
+          <span className="font-mono text-[10px] md:text-[12px] tracking-[0.35em] uppercase text-cyan-400/70">
             Beyond the code
           </span>
         </motion.div>
