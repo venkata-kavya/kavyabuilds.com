@@ -70,7 +70,7 @@ const Hero = () => {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
               </span>
               <span className="font-mono text-xs font-medium text-cyan-300 tracking-widest">
-                KAVYABUILDS // ONLINE
+                KAVYABUILDS
               </span>
             </div>
           </motion.div>

@@ -1,11 +1,28 @@
 import React, { useRef, useState } from "react";
+
 import { Canvas, useFrame } from "@react-three/fiber";
+
 import { Float, ContactShadows } from "@react-three/drei";
+
 import { motion, AnimatePresence } from "framer-motion";
-import { Box, Cpu, Globe, Zap, Move, Minimize, Figma } from "lucide-react";
+
+import {
+  Box,
+  Cpu,
+  Globe,
+  Zap,
+  Move,
+  Minimize,
+  Figma,
+  ArrowUpRight,
+} from "lucide-react";
+
 import useIsMobile from "../../hooks/useIsMobile";
 
-// --- 1. LIGHTWEIGHT MOBILE CUBE (Simple Rotation) ---
+// ============================================================
+// MOBILE CUBE
+// ============================================================
+
 const MobileLootCube = ({ onClick }) => {
   const mesh = useRef(null);
 
@@ -17,76 +34,97 @@ const MobileLootCube = ({ onClick }) => {
   });
 
   return (
-    <mesh ref={mesh} onClick={onClick} scale={1.4}>
+    <mesh
+      ref={mesh}
+      scale={1.4}
+      onClick={onClick}
+      onPointerOver={() => (document.body.style.cursor = "pointer")}
+      onPointerOut={() => (document.body.style.cursor = "auto")}
+    >
       <boxGeometry args={[1.8, 1.8, 1.8]} />
+
       <meshBasicMaterial wireframe color="#00F0FF" />
     </mesh>
   );
 };
 
-// --- 2. HEAVY DESKTOP CUBE (Tesseract Rotation Logic) ---
+// ============================================================
+// DESKTOP CUBE
+// ============================================================
+
 const DesktopLootCube = ({ onClick, clicking }) => {
-  const groupRef = useRef(null); // Handles Hover/Click scales
-  const outerRef = useRef(null); // Individual Rotation
-  const innerRef = useRef(null); // Individual Rotation
-  const coreRef = useRef(null); // Individual Rotation
+  const groupRef = useRef(null);
+  const outerRef = useRef(null);
+  const innerRef = useRef(null);
+  const coreRef = useRef(null);
 
   useFrame((state, delta) => {
-    // A. TESSERACT ROTATION (Matches Preloader)
     if (outerRef.current) {
       outerRef.current.rotation.x += delta * 0.5;
       outerRef.current.rotation.y += delta * 0.6;
     }
+
     if (innerRef.current) {
-      innerRef.current.rotation.x -= delta * 0.5; // Counter-rotate
+      innerRef.current.rotation.x -= delta * 0.5;
       innerRef.current.rotation.y -= delta * 0.4;
     }
+
     if (coreRef.current) {
-      coreRef.current.rotation.x += delta * 1; // Fast spin core
-      coreRef.current.rotation.z += delta * 1;
+      coreRef.current.rotation.x += delta;
+      coreRef.current.rotation.z += delta;
     }
 
-    // B. INTERACTIVE SQUISH (Applied to Parent Group)
     if (groupRef.current) {
-      const targetScale = clicking ? 0.8 : 1;
-      const speed = 15;
+      const targetScale = clicking ? 0.78 : 1;
+      const speed = 14;
+
       groupRef.current.scale.x +=
         (targetScale - groupRef.current.scale.x) * speed * delta;
+
       groupRef.current.scale.y +=
         (targetScale - groupRef.current.scale.y) * speed * delta;
+
       groupRef.current.scale.z +=
         (targetScale - groupRef.current.scale.z) * speed * delta;
     }
   });
 
   return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+    <Float speed={1.7} rotationIntensity={0.35} floatIntensity={0.7}>
       <group
         ref={groupRef}
         onClick={onClick}
         onPointerOver={() => (document.body.style.cursor = "pointer")}
         onPointerOut={() => (document.body.style.cursor = "auto")}
       >
-        {/* Outer Wireframe (BLUE) */}
+        {/* Outer wireframe */}
         <mesh ref={outerRef}>
           <boxGeometry args={[2.5, 2.5, 2.5]} />
-          <meshBasicMaterial wireframe color="#00F0FF" />
-        </mesh>
 
-        {/* Inner Wireframe (WHITE) */}
-        <mesh ref={innerRef}>
-          <boxGeometry args={[1.5, 1.5, 1.5]} />
           <meshBasicMaterial
             wireframe
-            color="white"
-            opacity={0.4}
+            color="#00F0FF"
             transparent
+            opacity={0.85}
           />
         </mesh>
 
-        {/* Core Solid (BLUE) */}
+        {/* Inner wireframe */}
+        <mesh ref={innerRef}>
+          <boxGeometry args={[1.5, 1.5, 1.5]} />
+
+          <meshBasicMaterial
+            wireframe
+            color="#ffffff"
+            transparent
+            opacity={0.28}
+          />
+        </mesh>
+
+        {/* Core */}
         <mesh ref={coreRef}>
           <boxGeometry args={[0.8, 0.8, 0.8]} />
+
           <meshStandardMaterial
             color="#00F0FF"
             emissive="#00F0FF"
@@ -97,9 +135,9 @@ const DesktopLootCube = ({ onClick, clicking }) => {
 
         <ContactShadows
           position={[0, -3, 0]}
-          opacity={0.5}
-          scale={10}
-          blur={2.5}
+          opacity={0.28}
+          scale={7}
+          blur={3}
           far={4}
         />
       </group>
@@ -107,152 +145,537 @@ const DesktopLootCube = ({ onClick, clicking }) => {
   );
 };
 
-// --- 3. MAIN ARSENAL SECTION ---
+// ============================================================
+// MAIN
+// ============================================================
+
 const Arsenal = () => {
   const [lootIndex, setLootIndex] = useState(0);
   const [clicking, setClicking] = useState(false);
+
   const isMobile = useIsMobile();
+
+  // ==========================================================
+  // INVENTORY
+  // ==========================================================
 
   const inventory = [
     {
-      name: "THREE.JS",
+      name: "Three.js",
+      number: "01",
       tags: ["WebGL", "Shaders"],
       type: "IMMERSION",
       desc: "Rendering 3D graphics in the browser.",
-      icon: <Box size={32} />,
+      icon: <Box size={18} strokeWidth={1.4} />,
     },
     {
-      name: "REACT.JS",
+      name: "React.js",
+      number: "02",
       tags: ["Virtual DOM", "Hooks"],
-      type: "CORE_TECH",
+      type: "CORE TECH",
       desc: "Foundational library for atomic interfaces.",
-      icon: <Cpu size={32} />,
+      icon: <Cpu size={18} strokeWidth={1.4} />,
     },
     {
-      name: "SPLINE",
+      name: "Spline",
+      number: "03",
       tags: ["3D Modeling", "Web"],
-      type: "ASSET_GEN",
+      type: "ASSET GEN",
       desc: "Rapid 3D asset generation.",
-      icon: <Globe size={32} />,
+      icon: <Globe size={18} strokeWidth={1.4} />,
     },
     {
-      name: "FRAMER",
+      name: "Framer",
+      number: "04",
       tags: ["Animation", "Gestures"],
       type: "MOTION",
       desc: "Production-ready motion library.",
-      icon: <Zap size={32} />,
+      icon: <Zap size={18} strokeWidth={1.4} />,
     },
     {
       name: "GSAP",
+      number: "05",
       tags: ["Timeline", "ScrollTrigger"],
       type: "ANIMATION",
       desc: "High-performance animation library.",
-      icon: <Move size={32} />,
+      icon: <Move size={18} strokeWidth={1.4} />,
     },
     {
-      name: "LENIS",
+      name: "Lenis",
+      number: "06",
       tags: ["Scroll", "WebGL Sync"],
-      type: "UX_FEEL",
+      type: "UX FEEL",
       desc: "Standardizing scroll physics.",
-      icon: <Minimize size={32} />,
+      icon: <Minimize size={18} strokeWidth={1.4} />,
     },
     {
-      name: "FIGMA",
+      name: "Figma",
+      number: "07",
       tags: ["Prototyping", "Design"],
       type: "DESIGN",
       desc: "The blueprint interface.",
-      icon: <Figma size={32} />,
+      icon: <Figma size={18} strokeWidth={1.4} />,
     },
   ];
 
+  // ==========================================================
+  // INTERACTION
+  // ==========================================================
+
   const handleLoot = () => {
     if (clicking) return;
+
     setClicking(true);
+
     setTimeout(() => {
       setLootIndex((prev) => (prev + 1) % inventory.length);
+
       setClicking(false);
-    }, 200);
+    }, 220);
   };
 
   const item = inventory[lootIndex];
 
+  // ==========================================================
+  // RENDER
+  // ==========================================================
+
   return (
     <section
       id="arsenal"
-      className="min-h-screen bg-[#050505] flex items-center justify-center relative overflow-hidden py-24"
+      className="relative min-h-screen overflow-hidden bg-[#050505] text-white"
     >
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] pointer-events-none" />
+      {/* ======================================================
+          BACKGROUND
+      ====================================================== */}
 
-      <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 px-6 items-center">
-        {/* LEFT: 3D Canvas */}
-        <div className="h-[400px] md:h-[500px] w-full relative">
-          <div className="absolute top-0 left-0 font-mono text-xs text-cyan-500">
-            /// INTERACTIVE_LOOT_BOX
-          </div>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <motion.div
+          animate={{
+            x: ["-5%", "5%", "-5%"],
+            y: ["-4%", "4%", "-4%"],
+            opacity: [0.025, 0.045, 0.025],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="
+            absolute
+            left-[18%]
+            top-[32%]
+            h-[600px]
+            w-[600px]
+            rounded-full
+            bg-cyan-400
+            blur-[180px]
+          "
+        />
 
-          <Canvas
-            camera={{ position: [0, 0, 6] }}
-            dpr={[1, isMobile ? 1 : 1.5]}
-          >
-            {!isMobile && <ambientLight intensity={0.5} />}
-            {!isMobile && <pointLight position={[10, 10, 10]} intensity={1} />}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_42%_50%,transparent_10%,#050505_75%)]" />
+      </div>
 
-            {isMobile ? (
-              <MobileLootCube onClick={handleLoot} />
-            ) : (
-              <DesktopLootCube onClick={handleLoot} clicking={clicking} />
-            )}
-          </Canvas>
+      {/* ======================================================
+          THE STACK — ABOVE THE CUBE
+      ====================================================== */}
 
-          <div className="absolute bottom-4 left-0 right-0 text-center font-mono text-xs text-gray-500 tracking-widest">
-            [ {isMobile ? "TAP" : "CLICK"} TO DEPLOY ]
-          </div>
-        </div>
+      <div
+        className="
+    absolute
+    left-[236px]
+    top-10
+    z-30
+    flex
+    items-center
+    gap-4
+  "
+      >
+        <span
+          className="
+      whitespace-nowrap
+      font-mono
+      text-[11px]
+      uppercase
+      tracking-[0.35em]
+      text-cyan-400/70
+    "
+        >
+          THE STACK
+        </span>
+      </div>
+      {/* ======================================================
+          MAIN CONTENT
+      ====================================================== */}
 
-        {/* RIGHT: Data Card */}
-        <div className="flex justify-center lg:justify-start pl-0 md:pl-12 lg:pl-40 h-[400px] items-center">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={lootIndex}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="w-full max-w-sm bg-gradient-to-br from-white/10 to-black/80 backdrop-blur-2xl border border-white/10 p-8 rounded-xl shadow-2xl relative overflow-hidden"
+      <div
+        className="
+          relative
+          z-10
+          mx-auto
+          flex
+          min-h-screen
+          w-full
+          max-w-[1500px]
+          items-center
+          px-6
+          pb-24
+          pt-10
+          md:px-10
+        "
+      >
+        <div className="grid w-full grid-cols-1 items-center lg:grid-cols-[1.35fr_0.65fr]">
+          {/* ==================================================
+              LEFT — 3D OBJECT
+          ================================================== */}
+
+          <div className="relative flex h-[470px] items-center justify-center md:h-[650px]">
+            {/* Background number */}
+            <motion.span
+              key={item.number}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="
+                pointer-events-none
+                absolute
+                left-[7%]
+                top-1/2
+                -translate-y-1/2
+                select-none
+                text-[30vw]
+                font-semibold
+                leading-none
+                tracking-[-0.12em]
+                text-white/[0.018]
+                md:text-[23vw]
+              "
             >
-              <div className="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
-                <div className="p-3 bg-black/40 rounded-lg border border-white/10 text-cyan-400">
-                  {item.icon}
-                </div>
-                <div className="text-right">
-                  <div className="font-mono text-[10px] text-gray-500 mb-1">
-                    /// MODULE_0{lootIndex + 1}
-                  </div>
-                  <div className="font-mono text-[10px] font-bold text-cyan-400 tracking-widest bg-cyan-900/20 px-2 py-1 rounded">
-                    {item.type}
-                  </div>
-                </div>
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-3 tracking-tight">
-                {item.name}
-              </h3>
-              <p className="text-gray-400 font-light text-sm leading-relaxed mb-8">
-                {item.desc}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {item.tags.map((tag, i) => (
-                  <span
-                    key={i}
-                    className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-mono text-gray-300"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              {item.number}
+            </motion.span>
+
+            {/* Main orbit */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 35,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="
+                absolute
+                left-1/2
+                top-1/2
+                h-[320px]
+                w-[320px]
+                -translate-x-1/2
+                -translate-y-1/2
+                rounded-full
+                border
+                border-white/[0.035]
+                md:h-[500px]
+                md:w-[500px]
+              "
+            />
+
+            {/* Secondary orbit */}
+            <div
+              className="
+                absolute
+                left-1/2
+                top-1/2
+                h-[230px]
+                w-[230px]
+                -translate-x-1/2
+                -translate-y-1/2
+                rounded-full
+                border
+                border-cyan-400/[0.045]
+                md:h-[370px]
+                md:w-[370px]
+              "
+            />
+
+            {/* Orbit marker */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="
+                absolute
+                left-1/2
+                top-1/2
+                h-[350px]
+                w-[350px]
+                -translate-x-1/2
+                -translate-y-1/2
+                md:h-[530px]
+                md:w-[530px]
+              "
+            >
+              <span
+                className="
+                  absolute
+                  left-1/2
+                  top-0
+                  h-1
+                  w-1
+                  -translate-x-1/2
+                  rounded-full
+                  bg-cyan-400
+                  shadow-[0_0_12px_#00F0FF]
+                "
+              />
             </motion.div>
-          </AnimatePresence>
+
+            {/* 3D canvas */}
+            <div className="relative z-10 h-full w-full">
+              <Canvas
+                camera={{ position: [0, 0, 6] }}
+                dpr={[1, isMobile ? 1 : 1.5]}
+              >
+                {!isMobile && <ambientLight intensity={0.5} />}
+
+                {!isMobile && (
+                  <pointLight position={[10, 10, 10]} intensity={1} />
+                )}
+
+                {isMobile ? (
+                  <MobileLootCube onClick={handleLoot} />
+                ) : (
+                  <DesktopLootCube onClick={handleLoot} clicking={clicking} />
+                )}
+              </Canvas>
+            </div>
+
+            {/* Technical labels */}
+            <div className="absolute left-0 top-[8%] font-mono text-[7px] tracking-[0.3em] text-white/15">
+              OBJECT / 3D
+            </div>
+
+            <div className="absolute bottom-[10%] left-0 font-mono text-[7px] tracking-[0.3em] text-white/15">
+              WEBGL
+            </div>
+
+            {/* Interaction */}
+            <motion.button
+              onClick={handleLoot}
+              animate={{
+                opacity: [0.35, 0.75, 0.35],
+              }}
+              transition={{
+                duration: 2.8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="
+                absolute
+                bottom-[5%]
+                left-1/2
+                z-30
+                -translate-x-1/2
+                whitespace-nowrap
+                font-mono
+                text-[8px]
+                tracking-[0.28em]
+                text-white/40
+                transition-colors
+                duration-300
+                hover:text-cyan-400
+              "
+            >
+              <span className="hidden sm:inline">CLICK TO EXPLORE</span>
+
+              <span className="sm:hidden">TAP TO EXPLORE</span>
+
+              <span className="ml-2 text-cyan-400/60">→</span>
+            </motion.button>
+          </div>
+
+          {/* ==================================================
+              RIGHT — INFORMATION
+          ================================================== */}
+
+          <div className="relative flex items-center lg:pl-8">
+            <div className="w-full max-w-[520px]">
+              {/* Item header */}
+              <div className="mb-8 flex items-center justify-between border-b border-white/[0.08] pb-5">
+                <span className="font-mono text-[8px] tracking-[0.3em] text-cyan-400/70">
+                  {item.type}
+                </span>
+
+                <span className="font-mono text-[8px] tracking-[0.3em] text-white/20">
+                  {item.number} / 07
+                </span>
+              </div>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={lootIndex}
+                  initial={{
+                    opacity: 0,
+                    y: 25,
+                    filter: "blur(10px)",
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)",
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: -20,
+                    filter: "blur(10px)",
+                  }}
+                  transition={{
+                    duration: 0.55,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  {/* Icon */}
+                  <div className="mb-7 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-cyan-400">
+                    {item.icon}
+                  </div>
+
+                  {/* Name */}
+                  <h2
+                    className="
+                      text-4xl
+                      font-semibold
+                      leading-[0.95]
+                      tracking-[-0.045em]
+                      text-white
+                      md:text-5xl
+                    "
+                  >
+                    {item.name}
+                  </h2>
+
+                  {/* Description */}
+                  <p
+                    className="
+                      mt-8
+                      max-w-md
+                      text-sm
+                      font-light
+                      leading-7
+                      tracking-[0.04em]
+                      text-white/35
+                      md:text-base
+                    "
+                  >
+                    {item.desc}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="mt-8 flex gap-6">
+                    {item.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="
+                          font-mono
+                          text-[8px]
+                          tracking-[0.25em]
+                          text-white/25
+                        "
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Explore */}
+              <div className="mt-14 flex items-center justify-between">
+                <button
+                  onClick={handleLoot}
+                  className="
+                    group
+                    flex
+                    items-center
+                    gap-4
+                    border-b
+                    border-white/10
+                    pb-3
+                    font-mono
+                    text-[8px]
+                    tracking-[0.25em]
+                    text-white/40
+                    transition-colors
+                    duration-300
+                    hover:border-cyan-400/50
+                    hover:text-cyan-400
+                  "
+                >
+                  EXPLORE NEXT
+                  <ArrowUpRight
+                    size={13}
+                    strokeWidth={1}
+                    className="
+                      transition-transform
+                      duration-300
+                      group-hover:translate-x-1
+                      group-hover:-translate-y-1
+                    "
+                  />
+                </button>
+
+                {/* Progress */}
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-[3px]">
+                    {inventory.map((_, index) => (
+                      <span
+                        key={index}
+                        className={`h-[2px] w-4 transition-all duration-500 ${
+                          index === lootIndex ? "bg-cyan-400" : "bg-white/10"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* ======================================================
+          BOTTOM RIGHT
+      ====================================================== */}
+
+      <div
+        className="
+          absolute
+          bottom-10
+          right-6
+          z-20
+          md:right-10
+        "
+      >
+        <span className="font-mono text-[7px] tracking-[0.3em] text-white/15">
+          DIGITAL MATERIALS
+        </span>
+      </div>
+
+      {/* Bottom fade */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          bottom-0
+          left-0
+          right-0
+          z-10
+          h-32
+          bg-gradient-to-t
+          from-[#050505]
+          to-transparent
+        "
+      />
     </section>
   );
 };

@@ -2,50 +2,155 @@ import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 const Cursor = () => {
-  const mouse = { x: useMotionValue(0), y: useMotionValue(0) };
-  const [hoverState, setHoverState] = useState(null);
-  const [isVisible, setIsVisible] = useState(false); // Hide until mouse moves
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  const smoothOptions = { damping: 50, stiffness: 300, mass: 1.0 };
-  const smoothX = useSpring(mouse.x, smoothOptions);
-  const smoothY = useSpring(mouse.y, smoothOptions);
+  const smoothX = useSpring(mouseX, {
+    damping: 50,
+    stiffness: 300,
+    mass: 1,
+  });
+
+  const smoothY = useSpring(mouseY, {
+    damping: 50,
+    stiffness: 300,
+    mass: 1,
+  });
+
+  const [hoverState, setHoverState] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isDotMode, setIsDotMode] = useState(false);
 
   useEffect(() => {
-    const manageMouseMove = (e) => {
-      if (!isVisible) setIsVisible(true);
-      mouse.x.set(e.clientX);
-      mouse.y.set(e.clientY);
+    const handleMouseMove = (e) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
 
-      const target = e.target;
-      const isClickable = target.closest("a") || target.closest("button");
-      const isInput = target.closest("input") || target.closest("textarea");
+      setIsVisible(true);
 
-      if (isInput) setHoverState("text");
-      else if (isClickable) setHoverState("active");
-      else setHoverState(null);
+      /*
+       * Find the accordion section from whatever
+       * element the mouse is currently over.
+       */
+      const accordion = e.target.closest("[data-cursor='dot']");
+
+      if (accordion) {
+        setIsDotMode(true);
+        setHoverState(null);
+        return;
+      }
+
+      setIsDotMode(false);
+
+      const clickable = e.target.closest("a") || e.target.closest("button");
+
+      const input = e.target.closest("input") || e.target.closest("textarea");
+
+      if (input) {
+        setHoverState("text");
+      } else if (clickable) {
+        setHoverState("active");
+      } else {
+        setHoverState(null);
+      }
     };
-    window.addEventListener("mousemove", manageMouseMove);
-    return () => window.removeEventListener("mousemove", manageMouseMove);
-  }, [isVisible]);
 
-  // Only render on devices that support hover to avoid touch issues
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [mouseX, mouseY]);
+
   return (
-    <div className="hidden md:block pointer-events-none fixed inset-0 z-[100]">
+    <div
+      className="
+        hidden
+        md:block
+        pointer-events-none
+        fixed
+        inset-0
+        z-[99999]
+      "
+      aria-hidden="true"
+    >
+      {/* =========================================
+          DOT MODE
+          ========================================= */}
+
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-white rounded-full mix-blend-difference"
+        className="
+          fixed
+          top-0
+          left-0
+          w-[6px]
+          h-[6px]
+          rounded-full
+          bg-cyan-400
+        "
         style={{
-          x: mouse.x,
-          y: mouse.y,
+          x: mouseX,
+          y: mouseY,
           translateX: "-50%",
           translateY: "-50%",
         }}
         animate={{
-          scale: hoverState === "active" ? 3 : hoverState === "text" ? 0 : 1,
-          opacity: isVisible ? 1 : 0,
+          opacity: isVisible && isDotMode ? 1 : 0,
+          scale: isDotMode ? 1 : 0.5,
+        }}
+        transition={{
+          duration: 0.12,
+          ease: "easeOut",
         }}
       />
+
+      {/* =========================================
+          ORIGINAL CURSOR DOT
+          ========================================= */}
+
       <motion.div
-        className="fixed top-0 left-0 w-12 h-12 border border-cyan-400/50 rounded-full"
+        className="
+          fixed
+          top-0
+          left-0
+          w-1.5
+          h-1.5
+          rounded-full
+          bg-white
+          mix-blend-difference
+        "
+        style={{
+          x: mouseX,
+          y: mouseY,
+          translateX: "-50%",
+          translateY: "-50%",
+        }}
+        animate={{
+          opacity: isVisible && !isDotMode ? 1 : 0,
+
+          scale: hoverState === "active" ? 3 : hoverState === "text" ? 0 : 1,
+        }}
+        transition={{
+          duration: 0.15,
+          ease: "easeOut",
+        }}
+      />
+
+      {/* =========================================
+          ORIGINAL CURSOR RING
+          ========================================= */}
+
+      <motion.div
+        className="
+          fixed
+          top-0
+          left-0
+          w-12
+          h-12
+          rounded-full
+          border
+          border-cyan-400/50
+        "
         style={{
           x: smoothX,
           y: smoothY,
@@ -53,11 +158,17 @@ const Cursor = () => {
           translateY: "-50%",
         }}
         animate={{
+          opacity: isVisible && !isDotMode && hoverState !== "text" ? 1 : 0,
+
           scale: hoverState === "active" ? 1.5 : hoverState === "text" ? 0 : 1,
-          opacity: isVisible && hoverState !== "text" ? 1 : 0,
+        }}
+        transition={{
+          duration: 0.2,
+          ease: "easeOut",
         }}
       />
     </div>
   );
 };
+
 export default Cursor;
