@@ -1,26 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
 
+    <!-- =========================================
+         FAVICON
+    ========================================== -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- =========================================
+         CRITICAL MOBILE VIEWPORT
+    ========================================== -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
+    />
+
+    <!-- Prevent automatic phone number detection -->
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- =========================================
+         MOBILE / BROWSER THEME
+    ========================================== -->
+
+    <meta name="theme-color" content="#050505" />
+
+    <meta name="color-scheme" content="dark" />
+
+    <!-- iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="apple-mobile-web-app-title" content="KavyaBuilds" />
+
+    <!-- Android -->
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- =========================================
+         SEO
+    ========================================== -->
 
     <title>KavyaBuilds | Creative Developer</title>
+
     <meta
       name="description"
-      content="Immersive 3D Portfolio featuring React, WebGL, and Creative Engineering."
+      content="Immersive 3D portfolio featuring React, WebGL, AI, and creative engineering."
     />
-    <meta name="theme-color" content="#050505" />
+
+    <meta name="author" content="KavyaBuilds" />
+
+    <meta name="robots" content="index, follow" />
+
+    <!-- =========================================
+         PERFORMANCE
+    ========================================== -->
+
+    <link rel="preconnect" href="https://api.fontshare.com" />
+
+    <link rel="dns-prefetch" href="https://api.fontshare.com" />
+
+    <!-- =========================================
+         FONTS
+    ========================================== -->
 
     <link
       href="https://api.fontshare.com/v2/css?f[]=clash-display@200,400,500,600,700&f[]=switzer@300,400,500&f[]=jetbrains-mono@400&display=swap"
       rel="stylesheet"
     />
+
+    <!-- =========================================
+         MOBILE SAFE AREA
+    ========================================== -->
+
+    <style>
+      html {
+        background: #050505;
+        width: 100%;
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-width: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: #050505;
+        overflow-x: hidden;
+      }
+
+      #root {
+        width: 100%;
+        min-width: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+
+      /*
+       * Prevent iOS/Android browsers from resizing
+       * text unexpectedly.
+       */
+      html,
+      body {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
+      /*
+       * Prevent tap highlight on mobile.
+       */
+      * {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /*
+       * Safe-area support for iPhones.
+       */
+      @supports (padding: env(safe-area-inset-top)) {
+        body {
+          padding-top: env(safe-area-inset-top);
+          padding-right: env(safe-area-inset-right);
+          padding-bottom: env(safe-area-inset-bottom);
+          padding-left: env(safe-area-inset-left);
+        }
+      }
+    </style>
   </head>
+
   <body>
     <div id="root"></div>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -6,7 +6,9 @@
   --neon-teal: #00d1a0;
 }
 
-/* ... rest of your CSS ... */
+/* =========================================
+   THEME
+========================================= */
 
 @theme {
   --font-sans: "Switzer", sans-serif;
@@ -14,14 +16,39 @@
   --font-mono: "JetBrains Mono", monospace;
 }
 
+/* =========================================
+   BASE
+========================================= */
+
+html {
+  background: var(--void-black);
+  overflow-x: hidden;
+}
+
 body {
+  margin: 0;
+  padding: 0;
   background-color: var(--void-black);
   color: #e0e0e0;
   font-family: var(--font-sans);
   overflow-x: hidden;
+  min-width: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* ACCESSIBILITY FIX: Only hide cursor on devices that HAVE a mouse */
+/* Prevent horizontal overflow on mobile */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+/* Only hide cursor on devices that HAVE a mouse */
 @media (hover: hover) and (pointer: fine) {
   body,
   a,
@@ -38,23 +65,35 @@ h3,
 h4 {
   font-family: var(--font-display);
 }
+
 .font-mono {
   font-family: var(--font-mono);
 }
 
+/* =========================================
+   SCROLLBAR
+========================================= */
+
 ::-webkit-scrollbar {
   width: 4px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--void-black);
 }
+
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(to bottom, var(--neon-cyan), var(--neon-teal));
   border-radius: 2px;
 }
 
+/* =========================================
+   SPLINE / 3D
+========================================= */
+
 .spline-mask {
   mask-image: radial-gradient(circle at center, black 40%, transparent 70%);
+
   -webkit-mask-image: radial-gradient(
     circle at center,
     black 40%,
@@ -68,6 +107,7 @@ h4 {
     rgba(0, 240, 255, 0.1) 0%,
     rgba(5, 5, 5, 0) 60%
   );
+
   pointer-events: none;
   z-index: 0;
   will-change: transform;
@@ -75,44 +115,653 @@ h4 {
 
 .text-outline {
   color: transparent;
+
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.05);
   text-stroke: 1px rgba(255, 255, 255, 0.05);
 }
 
-/* 3D CUBE SHAPES */
+/* =========================================
+   3D CUBE
+========================================= */
+
 .cube-container {
   perspective: 1000px;
 }
+
 .cube {
   position: relative;
   width: 150px;
   height: 150px;
   transform-style: preserve-3d;
 }
+
 .face {
   position: absolute;
+
   width: 150px;
   height: 150px;
+
   background: rgba(0, 240, 255, 0.05);
+
   border: 4px solid #00f0ff;
+
   box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
+
 .front {
   transform: rotateY(0deg) translateZ(75px);
 }
+
 .back {
   transform: rotateY(180deg) translateZ(75px);
 }
+
 .right {
   transform: rotateY(90deg) translateZ(75px);
 }
+
 .left {
   transform: rotateY(-90deg) translateZ(75px);
 }
+
 .top {
   transform: rotateX(90deg) translateZ(75px);
 }
+
 .bottom {
   transform: rotateX(-90deg) translateZ(75px);
+}
+
+/* =========================================================
+   =========================================================
+   PREMIUM PRELOADER
+   =========================================================
+   ========================================================= */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+
+  z-index: 99999;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  background: #050505;
+
+  color: #ffffff;
+
+  isolation: isolate;
+
+  /* Prevent mobile browser weirdness */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+}
+
+/* =========================================
+   PRELOADER GLOW
+========================================= */
+
+.preloader-glow {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 220px;
+  height: 220px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background: rgba(0, 240, 255, 0.045);
+
+  filter: blur(65px);
+
+  pointer-events: none;
+
+  will-change: transform, opacity;
+}
+
+/* =========================================
+   PRELOADER GRID
+========================================= */
+
+.preloader-grid {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  opacity: 0.014;
+
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+
+  background-size: 45px 45px;
+}
+
+/* =========================================
+   PRELOADER TOP
+========================================= */
+
+.preloader-top {
+  position: absolute;
+
+  top: 24px;
+  left: 28px;
+  right: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-family: var(--font-mono);
+
+  font-size: 7px;
+
+  letter-spacing: 0.25em;
+
+  color: rgba(255, 255, 255, 0.12);
+
+  pointer-events: none;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.brand-dot {
+  width: 5px;
+  height: 5px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--neon-cyan);
+
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.7);
+}
+
+/* =========================================
+   PRELOADER CENTER
+========================================= */
+
+.loader-center {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  pointer-events: none;
+}
+
+/* =========================================
+   LOADER BOX
+========================================= */
+
+.loader-box {
+  width: 210px;
+
+  flex-shrink: 0;
+}
+
+/* =========================================
+   IDENTIFIER
+========================================= */
+
+.identifier {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 14px;
+
+  font-family: var(--font-mono);
+
+  font-size: 6px;
+
+  line-height: 1;
+
+  letter-spacing: 0.22em;
+}
+
+.identifier span:first-child {
+  color: rgba(0, 240, 255, 0.45);
+}
+
+.identifier span:last-child {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.identifier i {
+  display: block;
+
+  width: 20px;
+  height: 1px;
+
+  flex-shrink: 0;
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* =========================================
+   PERCENTAGE
+========================================= */
+
+.percentage-row {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+}
+
+.percentage {
+  font-family: Arial, sans-serif;
+
+  font-size: 58px;
+
+  font-weight: 500;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.08em;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  font-variant-numeric: tabular-nums;
+}
+
+.percent-symbol {
+  margin-bottom: 4px;
+
+  font-family: var(--font-mono);
+
+  font-size: 7px;
+
+  line-height: 1;
+
+  letter-spacing: 0.15em;
+
+  color: rgba(0, 240, 255, 0.4);
+}
+
+/* =========================================
+   PROGRESS BAR
+========================================= */
+
+.progress-container {
+  position: relative;
+
+  width: 100%;
+
+  margin-top: 16px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 1px;
+
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+
+  background: var(--neon-cyan);
+
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+
+  will-change: width;
+}
+
+.progress-highlight {
+  position: absolute;
+
+  top: 0;
+
+  width: 18px;
+  height: 1px;
+
+  background: rgba(255, 255, 255, 0.65);
+
+  pointer-events: none;
+
+  filter: blur(0.2px);
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.status-row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-top: 11px;
+
+  font-family: var(--font-mono);
+
+  font-size: 5px;
+
+  line-height: 1;
+
+  letter-spacing: 0.2em;
+
+  color: rgba(255, 255, 255, 0.1);
+}
+
+.status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.status-dot {
+  width: 3px;
+  height: 3px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--neon-cyan);
+
+  box-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+}
+
+/* =========================================
+   PRELOADER BOTTOM
+========================================= */
+
+.preloader-bottom {
+  position: absolute;
+
+  bottom: 24px;
+
+  left: 28px;
+  right: 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  font-family: var(--font-mono);
+
+  font-size: 5px;
+
+  line-height: 1;
+
+  letter-spacing: 0.25em;
+
+  color: rgba(255, 255, 255, 0.08);
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   IPHONE / MOBILE
+   <= 480px
+   ========================================================= */
+
+@media screen and (max-width: 480px) {
+  /*
+    iPhone 16 is approximately:
+    393px × 852px
+
+    This intentionally makes the loader SMALL.
+  */
+
+  .preloader-glow {
+    width: 145px;
+    height: 145px;
+
+    filter: blur(48px);
+
+    background: rgba(0, 240, 255, 0.035);
+  }
+
+  .preloader-grid {
+    background-size: 30px 30px;
+
+    opacity: 0.008;
+  }
+
+  /* ---------- TOP ---------- */
+
+  .preloader-top {
+    top: 18px;
+
+    left: 18px;
+    right: 18px;
+
+    font-size: 6px;
+
+    letter-spacing: 0.22em;
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .brand-dot {
+    width: 4px;
+    height: 4px;
+  }
+
+  /* ---------- CENTER ---------- */
+
+  .loader-center {
+    padding: 16px;
+  }
+
+  /*
+    Deliberately tiny on phones.
+  */
+  .loader-box {
+    width: 150px;
+  }
+
+  /* ---------- IDENTIFIER ---------- */
+
+  .identifier {
+    gap: 6px;
+
+    margin-bottom: 9px;
+
+    font-size: 5px;
+
+    letter-spacing: 0.2em;
+  }
+
+  .identifier i {
+    width: 14px;
+  }
+
+  /* ---------- NUMBER ---------- */
+
+  .percentage {
+    font-size: 42px;
+
+    letter-spacing: -0.085em;
+  }
+
+  .percent-symbol {
+    margin-bottom: 3px;
+
+    font-size: 6px;
+  }
+
+  /* ---------- PROGRESS ---------- */
+
+  .progress-container {
+    margin-top: 11px;
+  }
+
+  .progress-highlight {
+    width: 13px;
+  }
+
+  /* ---------- STATUS ---------- */
+
+  .status-row {
+    margin-top: 8px;
+
+    font-size: 4px;
+
+    letter-spacing: 0.18em;
+  }
+
+  .status {
+    gap: 5px;
+  }
+
+  .status-dot {
+    width: 3px;
+    height: 3px;
+  }
+
+  /* ---------- BOTTOM ---------- */
+
+  .preloader-bottom {
+    bottom: 18px;
+
+    left: 18px;
+    right: 18px;
+
+    font-size: 4px;
+
+    letter-spacing: 0.2em;
+  }
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+   <= 360px
+   ========================================================= */
+
+@media screen and (max-width: 360px) {
+  .preloader-top {
+    left: 15px;
+    right: 15px;
+  }
+
+  .preloader-bottom {
+    left: 15px;
+    right: 15px;
+  }
+
+  .loader-box {
+    width: 135px;
+  }
+
+  .percentage {
+    font-size: 38px;
+  }
+
+  .identifier {
+    margin-bottom: 8px;
+  }
+
+  .progress-container {
+    margin-top: 9px;
+  }
+}
+
+/* =========================================================
+   LANDSCAPE MOBILE
+   ========================================================= */
+
+@media screen and (max-height: 500px) and (max-width: 900px) {
+  .preloader-top {
+    top: 12px;
+  }
+
+  .preloader-bottom {
+    bottom: 12px;
+  }
+
+  .loader-box {
+    transform: scale(0.78);
+  }
+}
+
+/* =========================================================
+   TABLETS
+   ========================================================= */
+
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .loader-box {
+    width: 190px;
+  }
+
+  .percentage {
+    font-size: 52px;
+  }
+
+  .preloader-top {
+    left: 24px;
+    right: 24px;
+  }
+
+  .preloader-bottom {
+    left: 24px;
+    right: 24px;
+  }
+}
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+@media screen and (min-width: 1025px) {
+  .loader-box {
+    width: 210px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader-glow,
+  .brand-dot,
+  .status-dot {
+    animation: none !important;
+  }
+
+  .progress-fill,
+  .progress-highlight {
+    transition: none !important;
+  }
 }
