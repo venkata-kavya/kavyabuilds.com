@@ -1,9 +1,6 @@
 import React, { useRef } from "react";
-
 import { motion, useScroll, useTransform } from "framer-motion";
-
 import { ArrowUpRight } from "lucide-react";
-
 import useIsMobile from "../../hooks/useIsMobile";
 
 const Work = () => {
@@ -15,32 +12,44 @@ const Work = () => {
     offset: ["start start", "end end"],
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-52%"]);
+  // Adjusted for 4 projects
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-68%"]);
 
   const projects = [
     {
-      title: "Aura",
-      type: "iOS inspired",
+      title: "Macfolio",
+      type: "macOS / Portfolio",
       description:
-        "A calm, tactile interface built around simplicity and motion.",
+        "A fully realized macOS-inspired portfolio experience blending familiar desktop interactions with a polished personal interface.",
+      img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=2070&auto=format&fit=crop",
+      link: "https://macfolio-kavyabuilds.vercel.app",
+    },
+
+    {
+      title: "Aura",
+      type: "iOS / Interface",
+      description:
+        "A calm, tactile interface inspired by the precision and simplicity of iOS, with fluid motion and a polished, minimal experience.",
       img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop",
       link: "https://aura-one-drab.vercel.app",
     },
+
     {
       title: "Neo Brutal",
-      type: "Anti-design",
+      type: "Anti-Design / Experiment",
       description:
-        "A bold visual system exploring contrast, structure and personality.",
+        "A deliberately loud anti-design experiment built around bold typography, raw structure, sharp contrast, and unapologetic personality.",
       img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop",
       link: "https://dorksense-three.vercel.app",
     },
+
     {
       title: "Mosaic OS",
-      type: "Application",
+      type: "3D / Creative Technology",
       description:
-        "A modular workspace designed around information and interaction.",
+        "A futuristic 3D experience exploring immersive interfaces, spatial interaction, and technology-forward visual design.",
       img: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop",
-      link: "https://mosaic-liart.vercel.app",
+      link: "YOUR_3D_WEBSITE_URL",
     },
   ];
 
@@ -104,9 +113,9 @@ const Work = () => {
           }
         `}
       >
-        {/* =========================================
+        {/* =================================================
             IMAGE
-        ========================================== */}
+        ================================================= */}
 
         <motion.img
           src={project.img}
@@ -144,9 +153,9 @@ const Work = () => {
           "
         />
 
-        {/* =========================================
+        {/* =================================================
             COLOR WASH
-        ========================================== */}
+        ================================================= */}
 
         <motion.div
           variants={{
@@ -173,9 +182,9 @@ const Work = () => {
           "
         />
 
-        {/* =========================================
+        {/* =================================================
             DARK GRADIENT
-        ========================================== */}
+        ================================================= */}
 
         <div
           className="
@@ -189,9 +198,9 @@ const Work = () => {
           "
         />
 
-        {/* =========================================
+        {/* =================================================
             TOP META
-        ========================================== */}
+        ================================================= */}
 
         <div
           className={`
@@ -222,9 +231,7 @@ const Work = () => {
             {project.type}
           </span>
 
-          {/* =========================================
-              PULSING CLICK ARROW
-          ========================================== */}
+          {/* CLICK ARROW */}
 
           <motion.div
             animate={{
@@ -277,9 +284,9 @@ const Work = () => {
           </motion.div>
         </div>
 
-        {/* =========================================
+        {/* =================================================
             CONTENT
-        ========================================== */}
+        ================================================= */}
 
         <div
           className={`
@@ -339,7 +346,7 @@ const Work = () => {
             </p>
           </motion.div>
 
-          {/* Accent */}
+          {/* ACCENT */}
 
           <motion.div
             variants={{
@@ -453,7 +460,7 @@ const Work = () => {
       ref={containerRef}
       className="
         relative
-        h-[250vh]
+        h-[300vh]
         bg-[#050505]
         text-white
       "
@@ -469,7 +476,9 @@ const Work = () => {
         "
       >
         <div className="w-full">
-          {/* INTRO */}
+          {/* =================================================
+              INTRO
+          ================================================= */}
 
           <div
             className="
@@ -526,7 +535,9 @@ const Work = () => {
             </p>
           </div>
 
-          {/* HORIZONTAL TRACK */}
+          {/* =================================================
+              HORIZONTAL TRACK
+          ================================================= */}
 
           <div className="w-full overflow-hidden">
             <motion.div
@@ -544,7 +555,9 @@ const Work = () => {
             </motion.div>
           </div>
 
-          {/* SCROLL HINT */}
+          {/* =================================================
+              SCROLL HINT
+          ================================================= */}
 
           <div
             className="
