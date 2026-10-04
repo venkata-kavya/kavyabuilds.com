@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-const Preloader = () => {
+const Preloader = ({ setLoading }) => {
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
 
@@ -28,6 +28,9 @@ const Preloader = () => {
 
         timeout = setTimeout(() => {
           setIsComplete(true);
+
+          // Tell App.jsx that loading is finished
+          setLoading(false);
         }, 300);
       }
     };
@@ -38,7 +41,7 @@ const Preloader = () => {
       cancelAnimationFrame(frame);
       clearTimeout(timeout);
     };
-  }, []);
+  }, [setLoading]);
 
   const status =
     progress < 20
@@ -87,7 +90,10 @@ const Preloader = () => {
             <div className="brand">
               <motion.span
                 animate={{ opacity: [0.25, 1, 0.25] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                }}
                 className="brand-dot"
               />
 
@@ -118,7 +124,9 @@ const Preloader = () => {
                 <div className="progress-track">
                   <motion.div
                     className="progress-fill"
-                    animate={{ width: `${progress}%` }}
+                    animate={{
+                      width: `${progress}%`,
+                    }}
                     transition={{
                       duration: 0.08,
                       ease: "linear",
@@ -141,7 +149,9 @@ const Preloader = () => {
               <div className="status-row">
                 <div className="status">
                   <motion.span
-                    animate={{ opacity: [0.2, 1, 0.2] }}
+                    animate={{
+                      opacity: [0.2, 1, 0.2],
+                    }}
                     transition={{
                       duration: 1,
                       repeat: Infinity,
