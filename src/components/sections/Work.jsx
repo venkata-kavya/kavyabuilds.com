@@ -1,11 +1,5 @@
 import React, { useLayoutEffect, useRef } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useMotionValue,
-  useSpring,
-} from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import useIsMobile from "../../hooks/useIsMobile";
 
@@ -44,7 +38,7 @@ const projects = [
     description:
       "A futuristic 3D experience exploring immersive interfaces, spatial interaction, and technology-forward visual design.",
     img: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop",
-    link: "YOUR_3D_WEBSITE_URL", // <- replace with a real URL
+    link: "YOUR_3D_WEBSITE_URL",
   },
 ];
 
@@ -191,12 +185,6 @@ const WorkMobile = () => (
 
 /* =====================================================
    DESKTOP: PINNED HORIZONTAL SCROLL
-
-   Section height = 100vh + horizontal overflow.
-   So 1px of vertical scroll == 1px of horizontal travel.
-   The pinned panel is exactly 100vh, same unit as the
-   section, so the pin releases exactly when the last
-   card lands.
 ===================================================== */
 
 const WorkDesktop = () => {
@@ -204,30 +192,34 @@ const WorkDesktop = () => {
   const viewportRef = useRef(null);
   const trackRef = useRef(null);
 
-  // Horizontal overflow in px, kept in a motion value so
-  // measuring never triggers a React re-render.
   const distance = useMotionValue(0);
 
   useLayoutEffect(() => {
     const viewport = viewportRef.current;
     const track = trackRef.current;
+
     if (!viewport || !track) return;
 
     const measure = () => {
-      distance.set(
-        Math.max(0, Math.round(track.scrollWidth - viewport.clientWidth)),
-      );
+      const trackWidth = track.getBoundingClientRect().width;
+      const viewportWidth = viewport.getBoundingClientRect().width;
+
+      distance.set(Math.max(0, trackWidth - viewportWidth));
     };
 
     measure();
 
     const observer = new ResizeObserver(measure);
+
     observer.observe(viewport);
     observer.observe(track);
+
+    window.addEventListener("resize", measure);
     window.addEventListener("load", measure);
 
     return () => {
       observer.disconnect();
+      window.removeEventListener("resize", measure);
       window.removeEventListener("load", measure);
     };
   }, [distance]);
@@ -237,16 +229,14 @@ const WorkDesktop = () => {
     offset: ["start start", "end end"],
   });
 
-  // Tight spring: smooths wheel notches without feeling laggy.
-  // Replace `smooth` with `scrollYProgress` below for 1:1 raw scroll.
-  const smooth = useSpring(scrollYProgress, {
-    stiffness: 220,
-    damping: 38,
-    mass: 0.35,
-    restDelta: 0.0005,
-  });
+  // Use actual scroll progress so the track reaches its exact
+  // final position before the pinned section releases.
+  const x = useTransform(
+    [scrollYProgress, distance],
+    ([progress, maxDistance]) => -progress * maxDistance,
+  );
 
-  const x = useTransform([smooth, distance], ([p, d]) => -p * d);
+  // Vertical scroll distance matches the horizontal travel distance.
   const sectionHeight = useTransform(distance, (d) => `calc(100vh + ${d}px)`);
 
   return (
@@ -302,6 +292,7 @@ const WorkDesktop = () => {
                 }}
                 className="h-px bg-white/30"
               />
+
               <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/25">
                 Scroll to explore
               </span>
@@ -323,6 +314,7 @@ const WorkDesktop = () => {
 
 const Work = () => {
   const isMobile = useIsMobile();
+
   return isMobile ? <WorkMobile /> : <WorkDesktop />;
 };
 

@@ -22,7 +22,7 @@
 
 html {
   background: var(--void-black);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -31,7 +31,7 @@ body {
   background-color: var(--void-black);
   color: #e0e0e0;
   font-family: var(--font-sans);
-  overflow-x: hidden;
+  overflow-x: clip;
   min-width: 0;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -42,6 +42,15 @@ body {
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+/* Hide the native cursor throughout the website */
+html,
+body,
+body *,
+body *::before,
+body *::after {
+  cursor: none !important;
 }
 
 /* =========================================

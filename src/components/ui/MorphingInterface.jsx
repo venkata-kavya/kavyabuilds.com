@@ -397,15 +397,11 @@ const MorphingInterface = () => {
 
               <div
                 className="
-                  relative
-                  flex
-                  h-[40px]
-                  items-center
-                  rounded-full
-                  bg-white/[0.025]
-                  border
-                  border-white/[0.06]
-                  p-1
+                   relative
+  flex
+  h-[40px]
+  items-center
+  p-1
                 "
               >
                 {NAV_ITEMS.map((item) => {
