@@ -38,7 +38,7 @@ const projects = [
     description:
       "A futuristic 3D experience exploring immersive interfaces, spatial interaction, and technology-forward visual design.",
     img: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop",
-    link: "YOUR_3D_WEBSITE_URL",
+    link: "https://mosaic-liart.vercel.app/",
   },
 ];
 
