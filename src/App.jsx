@@ -2,32 +2,20 @@ import React, { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
 
-// =====================================================
-// UI COMPONENTS
-// =====================================================
-
 import Preloader from "./components/ui/Preloader";
-import Cursor from "./components/ui/Cursor";
 import MorphingInterface from "./components/ui/MorphingInterface";
 import Footer from "./components/ui/Footer";
-
-// =====================================================
-// SECTION COMPONENTS
-// =====================================================
 
 import Hero from "./components/sections/Hero";
 import Intro from "./components/sections/Intro";
 import FeatureEngine from "./components/sections/FeatureEngine";
 import Arsenal from "./components/sections/Arsenal";
 import Work from "./components/sections/Work";
+import Testimonials from "./components/sections/Testimonials";
 import Contact from "./components/sections/Contact";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-
-  // =====================================================
-  // LENIS SMOOTH SCROLL
-  // =====================================================
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -54,58 +42,22 @@ export default function App() {
   }, []);
 
   return (
-    <div
-      className="
-        relative
-        min-h-screen
-        bg-[#050505]
-        selection:bg-[#00F0FF]
-        selection:text-black
-      "
-    >
-      {/* =================================================
-          CUSTOM CURSOR
-      ================================================= */}
-
-      <Cursor />
-
-      {/* =================================================
-          PRELOADER
-      ================================================= */}
-
+    <div className="portfolio-root relative min-h-screen bg-[#050505] selection:bg-[#00F0FF] selection:text-black">
       <AnimatePresence mode="wait">
         {isLoading && <Preloader setLoading={setIsLoading} />}
       </AnimatePresence>
 
-      {/* =================================================
-          MORPHING INTERFACE
-          
-          Appears after the preloader completes.
-      ================================================= */}
-
       {!isLoading && <MorphingInterface />}
-
-      {/* =================================================
-          MAIN CONTENT
-      ================================================= */}
 
       <main className="relative z-10">
         <Hero />
-
         <Intro />
-
         <FeatureEngine />
-
         <Arsenal />
-
         <Work />
-
+        <Testimonials />
         <Contact />
       </main>
-
-      {/* =================================================
-          FOOTER
-      ================================================= */}
 
       <Footer />
     </div>
