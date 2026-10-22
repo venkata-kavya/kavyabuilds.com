@@ -8,10 +8,10 @@ import Footer from "./components/ui/Footer";
 
 import Hero from "./components/sections/Hero";
 import Intro from "./components/sections/Intro";
+import Testimonials from "./components/sections/Testimonials";
 import FeatureEngine from "./components/sections/FeatureEngine";
 import Arsenal from "./components/sections/Arsenal";
 import Work from "./components/sections/Work";
-import Testimonials from "./components/sections/Testimonials";
 import Contact from "./components/sections/Contact";
 
 export default function App() {
@@ -52,10 +52,10 @@ export default function App() {
       <main className="relative z-10">
         <Hero />
         <Intro />
+        <Testimonials />
         <FeatureEngine />
         <Arsenal />
         <Work />
-        <Testimonials />
         <Contact />
       </main>
 

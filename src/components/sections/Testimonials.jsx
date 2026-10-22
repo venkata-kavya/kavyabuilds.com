@@ -1,199 +1,267 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Quote } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 const projects = [
   {
     number: "01",
     name: "Tennessee Tourism",
-    category: "WEBSITE PROPOSAL",
-    headline: "A destination deserves a digital experience to match.",
+    category: "WEBSITE CONCEPT",
+    headline: "A destination deserves a better digital experience.",
     description:
-      "A proposal to elevate Tennessee's tourism website through stronger visual storytelling, a refined visitor experience, and a maintainable digital platform.",
+      "Pitched a tourism website concept focused on visual storytelling, visitor experience, and a refined digital presence.",
     link: "https://state-of-tennessee-tourism.vercel.app",
-    linkLabel: "Explore proposal",
-    featured: true,
     initials: "TN",
+    featured: true,
+    accent: "cyan",
   },
   {
     number: "02",
     name: "Caledonia Builders",
     category: "REAL ESTATE",
-    headline: "Building a more considered digital presence.",
+    headline: "A more considered first impression.",
     description:
-      "A real estate website concept focused on architectural storytelling, elegant layouts, and presenting properties with clarity and confidence.",
+      "A real estate concept combining architectural storytelling, elegant layouts, and clear property presentation.",
     link: "https://caledonia-builders.vercel.app",
-    linkLabel: "Explore website",
-    featured: false,
     initials: "CB",
+    featured: false,
+    accent: "amber",
   },
   {
     number: "03",
     name: "Zariya",
     category: "LANGUAGE LEARNING",
-    headline: "Making local languages feel closer.",
+    headline: "Bringing local languages closer.",
     description:
-      "A language-learning experience designed around making regional-language discovery more approachable, engaging, and intuitive.",
+      "A language-learning concept designed to make regional-language discovery more approachable and intuitive.",
     link: "https://zariya-black.vercel.app",
-    linkLabel: "Explore experience",
-    featured: false,
     initials: "ZA",
+    featured: false,
+    accent: "violet",
   },
 ];
 
 const reveal = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+    },
   },
 };
 
-function ProjectCard({ project, index }) {
+const accents = {
+  cyan: "border-cyan-300/15 bg-cyan-300/[0.035] text-cyan-200/90",
+  amber: "border-amber-200/15 bg-amber-200/[0.03] text-amber-100/90",
+  violet: "border-violet-300/15 bg-violet-300/[0.035] text-violet-200/90",
+};
+
+/* =====================================================
+   SUBTLE CARD GRADIENTS
+===================================================== */
+
+const cardBackgrounds = {
+  cyan: "bg-[radial-gradient(ellipse_at_15%_0%,rgba(34,211,238,0.075),transparent_48%),radial-gradient(ellipse_at_90%_100%,rgba(8,145,178,0.045),transparent_45%),linear-gradient(135deg,#0e1314_0%,#0a0c0d_55%,#08090a_100%)]",
+
+  amber:
+    "bg-[radial-gradient(ellipse_at_90%_0%,rgba(251,191,36,0.065),transparent_48%),radial-gradient(ellipse_at_0%_100%,rgba(180,120,55,0.04),transparent_45%),linear-gradient(135deg,#13110d_0%,#0b0a09_55%,#080808_100%)]",
+
+  violet:
+    "bg-[radial-gradient(ellipse_at_15%_0%,rgba(167,139,250,0.075),transparent_48%),radial-gradient(ellipse_at_100%_100%,rgba(124,58,237,0.045),transparent_45%),linear-gradient(135deg,#121018_0%,#0b0a0e_55%,#080808_100%)]",
+};
+
+const hoverGlows = {
+  cyan: "bg-cyan-400/12",
+  amber: "bg-amber-300/10",
+  violet: "bg-violet-400/12",
+};
+
+/* =====================================================
+   PROJECT CARD
+===================================================== */
+
+function ProjectCard({ project }) {
   return (
     <motion.article
       variants={reveal}
-      className={`testimonial-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.09] ${
-        project.featured ? "bg-white/[0.045] md:col-span-2" : "bg-white/[0.025]"
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.25 }}
+      className={`group relative isolate flex flex-col overflow-hidden rounded-2xl border border-white/[0.09] ${
+        project.featured ? "md:col-span-2 md:flex-row" : ""
       }`}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      <div className="flex items-center justify-between px-6 pt-6 sm:px-8 sm:pt-8">
-        <span className="font-mono text-[10px] tracking-[0.22em] text-white/35">
-          / {project.number}
-        </span>
+      {/* Subtle project-specific background */}
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-0 -z-20 ${
+          cardBackgrounds[project.accent]
+        }`}
+      />
 
-        <span className="rounded-full border border-white/10 px-3 py-1.5 font-mono text-[9px] tracking-[0.13em] text-white/45">
-          {project.category}
-        </span>
-      </div>
+      {/* Restrained glow revealed on hover */}
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute -right-16 -top-20 -z-10 h-48 w-48 rounded-full opacity-0 blur-[90px] transition-opacity duration-500 group-hover:opacity-100 ${
+          hoverGlows[project.accent]
+        }`}
+      />
 
-      <div className="flex flex-1 flex-col px-6 pb-7 pt-8 sm:px-8 sm:pb-8">
-        <div className="mb-7 flex h-11 w-11 items-center justify-center rounded-full border border-cyan-400/25 bg-cyan-400/[0.07] text-sm font-medium text-cyan-300">
-          {project.initials}
+      {/* Very subtle grid texture */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.035]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.10) 1px, transparent 1px)",
+          backgroundSize: "36px 36px",
+          maskImage: "linear-gradient(to bottom right, black, transparent 75%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom right, black, transparent 75%)",
+        }}
+      />
+
+      <div
+        className={`relative flex flex-1 flex-col p-5 sm:p-6 ${
+          project.featured ? "md:p-7" : ""
+        }`}
+      >
+        {/* Project number and category */}
+        <div className="flex items-center justify-between gap-3">
+          <span className="font-mono text-[10px] tracking-[0.14em] text-white/45">
+            {project.number} / 03
+          </span>
+
+          <span className="rounded-full border border-white/[0.12] bg-black/10 px-2.5 py-1.5 font-mono text-[9px] tracking-[0.1em] text-white/60 backdrop-blur-sm">
+            {project.category}
+          </span>
         </div>
 
-        <h3
-          className={`max-w-2xl font-display font-medium leading-[1.08] tracking-[-0.045em] text-white ${
-            project.featured
-              ? "text-3xl sm:text-5xl lg:text-6xl"
-              : "text-2xl sm:text-3xl"
-          }`}
-        >
-          {project.headline}
-        </h3>
+        {/* Project details */}
+        <div className="mt-6 flex items-start gap-4">
+          <div
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border text-xs font-medium tracking-wide backdrop-blur-sm ${
+              accents[project.accent]
+            }`}
+          >
+            {project.initials}
+          </div>
 
-        <p className="mt-5 max-w-xl text-sm leading-7 text-white/45 sm:text-base">
-          {project.description}
-        </p>
+          <div className="min-w-0">
+            <h3
+              className={`font-display font-medium leading-[1.2] tracking-[-0.025em] text-white ${
+                project.featured ? "max-w-2xl text-2xl sm:text-3xl" : "text-xl"
+              }`}
+            >
+              {project.headline}
+            </h3>
 
-        <div className="mt-auto flex items-end justify-between gap-4 pt-9">
-          <div>
-            <p className="text-sm font-medium tracking-wide text-white/90">
-              {project.name}
-            </p>
-            <p className="mt-1 font-mono text-[10px] tracking-[0.12em] text-white/30">
-              PROJECT SHOWCASE
+            <p className="mt-3 max-w-xl text-[13px] leading-6 tracking-[0.02em] text-white/60">
+              {project.description}
             </p>
           </div>
+        </div>
+
+        {/* Project footer */}
+        <div className="mt-7 flex items-center justify-between gap-3 border-t border-white/[0.10] pt-4">
+          <span className="text-[12px] font-medium tracking-[0.035em] text-white/85">
+            {project.name}
+          </span>
 
           <a
             href={project.link}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`${project.linkLabel}: ${project.name}`}
-            className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/15 px-4 py-3 text-xs text-white/75 transition-all duration-300 hover:border-cyan-300/50 hover:bg-cyan-300/10 hover:text-cyan-200"
+            aria-label={`Explore ${project.name}`}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/[0.15] bg-black/10 px-3.5 py-2 text-[11px] tracking-[0.06em] text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.035] hover:text-white"
           >
-            <span>{project.linkLabel}</span>
+            Explore
             <ArrowUpRight
-              size={15}
+              size={14}
+              strokeWidth={1.6}
               className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
             />
           </a>
         </div>
       </div>
 
+      {/* Restrained animated bottom accent */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-gradient-to-r from-cyan-400/80 via-cyan-200/30 to-transparent transition-transform duration-500 group-hover:scale-x-100"
+        className="pointer-events-none absolute inset-x-5 bottom-0 h-px origin-left scale-x-0 bg-gradient-to-r from-white/25 via-white/10 to-transparent transition-transform duration-500 group-hover:scale-x-100"
       />
     </motion.article>
   );
 }
 
+/* =====================================================
+   SELECTED PROJECTS
+===================================================== */
+
 export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="relative overflow-hidden bg-[#050505] px-6 py-24 text-white sm:py-32 lg:px-12 lg:py-40"
+      className="relative overflow-hidden bg-[#050505] px-6 py-20 text-white sm:px-8 sm:py-24 lg:px-12"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/3 h-[450px] w-[450px] -translate-x-1/2 rounded-full bg-cyan-400/[0.035] blur-[140px]"
-      />
-
-      <div className="relative z-10 mx-auto max-w-7xl">
+      <div className="mx-auto max-w-none">
+        {/* Editorial heading */}
         <motion.div
           variants={reveal}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.25 }}
-          className="mb-14 flex flex-col justify-between gap-8 md:mb-20 md:flex-row md:items-end"
+          viewport={{ once: true, amount: 0.2 }}
+          className="mb-10 flex flex-col items-start justify-between gap-5 md:flex-row md:items-end"
         >
-          <div className="max-w-3xl">
-            <div className="mb-6 flex items-center gap-3">
-              <span className="h-px w-8 bg-cyan-400" />
-              <span className="font-mono text-[10px] tracking-[0.25em] text-cyan-300">
-                SELECTED PROJECTS / 03
+          <div className="max-w-4xl">
+            <div className="mb-5 flex items-center gap-3">
+              <span className="font-mono text-[11px] tracking-[0.2em] text-cyan-400/60">
+                SELECTED PROJECTS
               </span>
             </div>
 
-            <h2 className="font-display text-5xl font-medium leading-[0.98] tracking-[-0.06em] sm:text-7xl lg:text-8xl">
+            <h2 className="font-display text-4xl font-medium leading-[1.08] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
               Words are nice.
               <br />
-              <span className="text-white/35">Work speaks.</span>
+              <span className="text-white/35">Works speak.</span>
             </h2>
           </div>
 
-          <div className="max-w-xs">
-            <Quote
-              size={25}
-              strokeWidth={1.2}
-              className="mb-4 text-cyan-300/70"
-            />
-            <p className="text-sm leading-7 text-white/45">
-              Different challenges. Thoughtful digital experiences. A focus on
-              making every detail count.
-            </p>
-          </div>
+          <p className="max-w-[320px] pb-1 text-[13px] leading-7 tracking-[0.025em] text-white/55 md:text-right">
+            A mix of thoughtful design, expressive motion and engineering that
+            makes every detail count.
+          </p>
         </motion.div>
 
+        {/* Responsive project grid */}
         <motion.div
           variants={{
             hidden: {},
             visible: {
-              transition: { staggerChildren: 0.12 },
+              transition: { staggerChildren: 0.1 },
             },
           }}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.08 }}
-          className="grid grid-cols-1 gap-4 md:grid-cols-2"
+          className="grid grid-cols-1 gap-3.5 md:grid-cols-2"
         >
-          {projects.map((project, index) => (
-            <ProjectCard key={project.number} project={project} index={index} />
+          {projects.map((project) => (
+            <ProjectCard key={project.number} project={project} />
           ))}
         </motion.div>
 
-        <div className="mt-8 flex flex-col gap-2 border-t border-white/[0.08] pt-5 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-[9px] leading-5 tracking-[0.12em] text-white/25">
-            INDEPENDENT WORK · DESIGN · DEVELOPMENT
-          </p>
-          <p className="text-xs text-white/30">
-            Built with intention, one experience at a time.
-          </p>
+        {/* Footer */}
+        <div className="mt-5 flex items-center justify-between gap-4 border-t border-white/[0.08] pt-4">
+          <span className="font-mono text-[9px] tracking-[0.14em] text-white/35">
+            DESIGN · DEVELOPMENT
+          </span>
+
+          <span className="text-[10px] tracking-[0.04em] text-white/35">
+            Built with intention.
+          </span>
         </div>
       </div>
     </section>

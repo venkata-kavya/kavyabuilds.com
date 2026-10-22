@@ -26,11 +26,7 @@ const features = [
     keywords: ["3D", "Motion", "Atmosphere"],
     icon: Layers,
     hoverIcon: Layers2,
-    animation: {
-      y: [0, -3, 0],
-      rotate: [0, -4, 0],
-      scale: [1, 1.05, 1],
-    },
+    animation: { y: [0, -2, 0], rotate: [0, -3, 0] },
   },
   {
     number: "02",
@@ -40,10 +36,7 @@ const features = [
     keywords: ["Typography", "Layout", "Art direction"],
     icon: Book,
     hoverIcon: BookOpen,
-    animation: {
-      rotateY: [0, -12, 0],
-      y: [0, -2, 0],
-    },
+    animation: { rotateY: [0, -8, 0], y: [0, -2, 0] },
   },
   {
     number: "03",
@@ -53,11 +46,7 @@ const features = [
     keywords: ["Interaction", "Micro-motion", "UX"],
     icon: MousePointer,
     hoverIcon: MousePointerClick,
-    animation: {
-      x: [0, 3, 0],
-      y: [0, -2, 0],
-      scale: [1, 0.94, 1],
-    },
+    animation: { x: [0, 2, 0], y: [0, -2, 0] },
   },
   {
     number: "04",
@@ -67,10 +56,7 @@ const features = [
     keywords: ["Exploration", "Creative code", "Ideas"],
     icon: WandSparkles,
     hoverIcon: Sparkles,
-    animation: {
-      rotate: [0, -5, 5, -3, 3, 0],
-      y: [0, -2, 0],
-    },
+    animation: { rotate: [0, -3, 3, 0], y: [0, -2, 0] },
   },
   {
     number: "05",
@@ -80,10 +66,7 @@ const features = [
     keywords: ["Components", "Architecture", "Scale"],
     icon: Folder,
     hoverIcon: FolderOpen,
-    animation: {
-      y: [0, -3, 0],
-      scale: [1, 1.04, 1],
-    },
+    animation: { y: [0, -2, 0] },
   },
 ];
 
@@ -93,80 +76,36 @@ function FeatureIcon({ feature, hovered }) {
 
   return (
     <motion.div
-      className="relative flex h-14 w-14 shrink-0 items-center justify-center"
+      className="relative flex h-10 w-10 shrink-0 items-center justify-center"
       animate={feature.animation}
       transition={{
-        duration: feature.title === "Experimental" ? 0.65 : 0.55,
+        duration: 1.8,
         ease: "easeInOut",
         repeat: hovered ? Infinity : 0,
-        repeatType: "mirror",
       }}
-      style={{ transformStyle: "preserve-3d" }}
     >
-      <motion.div
-        className="absolute inset-1 rounded-full bg-cyan-400 blur-xl"
-        animate={{
-          opacity: hovered ? 0.16 : 0,
-          scale: hovered ? 1.15 : 0.7,
-        }}
-        transition={{ duration: 0.35, ease: EASE }}
-      />
-
       <motion.div
         className="absolute inset-0 flex items-center justify-center"
         animate={{
           opacity: hovered ? 0 : 1,
-          scale: hovered ? 0.78 : 1,
-          rotate: hovered ? -10 : 0,
+          scale: hovered ? 0.85 : 1,
         }}
-        transition={{ duration: 0.22, ease: EASE }}
+        transition={{ duration: 0.2, ease: EASE }}
       >
-        <DefaultIcon size={28} strokeWidth={1.5} className="text-cyan-300" />
+        <DefaultIcon size={23} strokeWidth={1.4} className="text-cyan-200/70" />
       </motion.div>
 
       <motion.div
         className="absolute inset-0 flex items-center justify-center"
         animate={{
           opacity: hovered ? 1 : 0,
-          scale: hovered ? 1 : 0.78,
-          rotate: hovered ? 0 : 10,
+          scale: hovered ? 1 : 0.85,
         }}
-        transition={{ duration: 0.25, ease: EASE }}
+        transition={{ duration: 0.2, ease: EASE }}
       >
-        <HoverIcon size={28} strokeWidth={1.5} className="text-cyan-300" />
+        <HoverIcon size={23} strokeWidth={1.4} className="text-cyan-200" />
       </motion.div>
     </motion.div>
-  );
-}
-
-function FlipArrow({ flipped, hovered }) {
-  return (
-    <motion.span
-      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border"
-      animate={{
-        y: hovered ? -2 : 0,
-        borderColor: hovered
-          ? "rgba(103,232,249,0.35)"
-          : "rgba(255,255,255,0.10)",
-        color: hovered ? "#67e8f9" : "rgba(255,255,255,0.55)",
-      }}
-      transition={{ duration: 0.3, ease: EASE }}
-    >
-      <motion.span
-        className="flex items-center justify-center"
-        animate={{
-          rotate: flipped ? 0 : 0,
-          scale: hovered ? 1.08 : 1,
-        }}
-        transition={{ duration: 0.3, ease: EASE }}
-      >
-        {flipped ? (
-          <RotateCcw size={16} strokeWidth={1.5} />
-        ) : (
-          <ArrowUpRight size={18} strokeWidth={1.5} />
-        )}
-      </motion.span>
-    </motion.span>
   );
 }
 
@@ -194,108 +133,133 @@ function FeatureCard({
       onClick={() =>
         setFlippedIndex((current) => (current === index ? null : index))
       }
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{
-        duration: 0.65,
-        delay: index * 0.07,
+        duration: 0.5,
+        delay: index * 0.06,
         ease: EASE,
       }}
-      className="group relative min-h-[350px] w-full text-left outline-none sm:min-h-[370px] xl:min-h-[390px]"
-      style={{ perspective: 1200 }}
+      className="group relative h-[285px] w-full text-left outline-none sm:h-[300px]"
+      style={{ perspective: 1000 }}
     >
       <motion.div
         className="absolute inset-0"
         animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.65, ease: EASE }}
+        transition={{ duration: 0.5, ease: EASE }}
         style={{ transformStyle: "preserve-3d" }}
       >
-        {/* FRONT */}
+        {/* Front of card */}
         <div
-          className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border p-6 sm:p-7"
+          className="absolute inset-0 isolate flex flex-col overflow-hidden rounded-xl border p-5 sm:p-6"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
             borderColor: hovered
-              ? "rgba(255,255,255,0.16)"
-              : "rgba(255,255,255,0.08)",
+              ? "rgba(103,232,249,0.28)"
+              : "rgba(255,255,255,0.085)",
             background: hovered
-              ? "rgba(255,255,255,0.035)"
-              : "rgba(255,255,255,0.018)",
+              ? "linear-gradient(135deg, rgba(34,211,238,0.075), rgba(255,255,255,0.025) 65%, rgba(34,211,238,0.025))"
+              : "linear-gradient(135deg, rgba(34,211,238,0.035), rgba(255,255,255,0.012) 65%, rgba(34,211,238,0.015))",
             transition: "border-color 300ms ease, background 300ms ease",
           }}
         >
-          <div className="flex items-start justify-between gap-3">
-            <FeatureIcon feature={feature} hovered={hovered} />
+          {/* Ambient cyan glow */}
+          <div
+            aria-hidden="true"
+            className={`pointer-events-none absolute -right-16 -top-20 -z-10 h-40 w-40 rounded-full blur-[65px] transition-opacity duration-500 ${
+              hovered
+                ? "bg-cyan-300/[0.14] opacity-100"
+                : "bg-cyan-400/[0.07] opacity-70"
+            }`}
+          />
 
-            <span className="pt-2 font-mono text-[10px] tracking-widest text-white/35">
-              {feature.number} / 05
-            </span>
+          {/* Very subtle lower accent */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-cyan-300/[0.025] to-transparent"
+          />
+
+          {/* Icon only — no card number */}
+          <div className="relative z-10 flex items-start">
+            <FeatureIcon feature={feature} hovered={hovered} />
           </div>
 
-          <div className="mt-auto pt-12">
-            <motion.div
-              className="mb-5 h-px origin-left bg-cyan-300"
-              animate={{
-                width: hovered ? "48px" : "26px",
-                opacity: hovered ? 0.9 : 0.4,
-              }}
-              transition={{ duration: 0.35, ease: EASE }}
-            />
-
-            <h3 className="font-display text-3xl font-medium leading-[1.05] tracking-tight text-white sm:text-[2rem]">
+          {/* Title and description */}
+          <div className="relative z-10 mt-auto">
+            <h3 className="font-display text-2xl font-medium tracking-[-0.025em] text-white sm:text-[1.7rem]">
               {feature.title}
             </h3>
 
-            <div className="mt-6 flex items-center justify-between gap-3">
-              <span className="text-[10px] uppercase tracking-[0.18em] text-white/35">
-                Explore
+            <p className="mt-3 text-[12px] leading-6 tracking-[0.015em] text-white/50">
+              {feature.description}
+            </p>
+
+            {/* Discover interaction */}
+            <div className="mt-5 flex items-center justify-between border-t border-white/[0.09] pt-3">
+              <span className="text-[9px] uppercase tracking-[0.16em] text-white/40">
+                Discover
               </span>
 
-              <FlipArrow flipped={false} hovered={hovered} />
+              <motion.span
+                animate={{
+                  x: hovered ? 2 : 0,
+                  color: hovered ? "#a5f3fc" : "rgba(165,243,252,0.55)",
+                }}
+                transition={{ duration: 0.25 }}
+              >
+                <ArrowUpRight size={16} strokeWidth={1.4} />
+              </motion.span>
             </div>
           </div>
         </div>
 
-        {/* BACK */}
+        {/* Back of card */}
         <div
-          className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border p-6 sm:p-7"
+          className="absolute inset-0 isolate flex flex-col overflow-hidden rounded-xl border border-cyan-200/20 bg-[#0b0e0f] p-5 sm:p-6"
           style={{
             transform: "rotateY(180deg)",
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
-            borderColor: "rgba(103,232,249,0.22)",
-            background: "rgba(255,255,255,0.035)",
           }}
         >
-          <div className="flex items-center justify-between gap-3">
-            <span className="font-mono text-[10px] tracking-widest text-white/40">
-              {feature.number} / DETAILS
-            </span>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-cyan-400/[0.07] blur-[65px]"
+          />
 
-            <FlipArrow flipped={true} hovered={hovered} />
+          <div className="relative z-10 flex items-center justify-end">
+            <RotateCcw
+              size={15}
+              strokeWidth={1.4}
+              className="text-cyan-200/70"
+            />
           </div>
 
-          <div className="mt-auto pt-8">
-            <h3 className="font-display text-3xl font-medium leading-[1.05] tracking-tight text-white sm:text-[2rem]">
+          <div className="relative z-10 mt-auto">
+            <h3 className="font-display text-2xl font-medium tracking-[-0.025em] text-white">
               {feature.title}
             </h3>
 
-            <p className="mt-5 max-w-sm text-sm leading-7 text-white/60">
+            <p className="mt-4 text-[13px] leading-6 tracking-[0.015em] text-white/55">
               {feature.description}
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap gap-2">
               {feature.keywords.map((keyword) => (
                 <span
                   key={keyword}
-                  className="max-w-full rounded-full border border-white/10 px-3 py-2 text-[11px] leading-tight text-white/55"
+                  className="rounded-full border border-cyan-200/[0.12] bg-cyan-200/[0.025] px-2.5 py-1.5 text-[10px] tracking-wide text-white/60"
                 >
                   {keyword}
                 </span>
               ))}
             </div>
+
+            <p className="mt-6 border-t border-white/[0.08] pt-3 text-[9px] uppercase tracking-[0.16em] text-white/35">
+              Click to return
+            </p>
           </div>
         </div>
       </motion.div>
@@ -310,50 +274,49 @@ export default function FeatureEngine() {
   return (
     <section
       id="what-i-build"
-      className="relative overflow-hidden px-5 py-24 text-white sm:px-8 sm:py-32"
+      className="relative overflow-hidden px-6 py-20 text-white sm:px-8 sm:py-24 lg:px-12"
     >
-      <div className="mx-auto max-w-[1600px]">
-        {/* SECTION HEADING */}
-        <div className="mb-12 flex flex-col justify-between gap-6 sm:mb-16 sm:flex-row sm:items-end">
+      <div className="mx-auto max-w-none">
+        {/* Section heading */}
+        <div className="mb-9 flex flex-col justify-between gap-5 sm:mb-12 sm:flex-row sm:items-end">
           <div>
             <motion.p
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, ease: EASE }}
-              className="mb-5 flex items-center gap-3 text-[10px] uppercase tracking-[0.24em] text-white/40"
+              transition={{ duration: 0.45, ease: EASE }}
+              className="mb-4 text-[10px] uppercase tracking-[0.2em] text-cyan-400/70"
             >
-              <span className="h-px w-7 bg-cyan-300/70" />
               What I build
             </motion.p>
 
             <motion.h2
-              initial={{ opacity: 0, y: 18 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: EASE }}
-              className="font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-6xl"
+              transition={{ duration: 0.55, ease: EASE }}
+              className="font-display text-4xl font-medium leading-[1.08] tracking-[-0.035em] sm:text-5xl lg:text-6xl"
             >
               Digital experiences
               <br />
-              <span className="text-white/40">with character.</span>
+              <span className="text-white/35">with character.</span>
             </motion.h2>
           </div>
 
           <motion.p
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1, ease: EASE }}
-            className="max-w-xs text-sm leading-6 text-white/45"
+            transition={{ duration: 0.5, delay: 0.08, ease: EASE }}
+            className="max-w-xs text-[13px] leading-6 tracking-[0.015em] text-white/45"
           >
-            A mix of thoughtful design, expressive motion and engineering that
-            makes every detail count.
+            Thoughtful design, expressive motion and engineering — every detail
+            has a purpose.
           </motion.p>
         </div>
 
-        {/* CARDS */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        {/* Capability cards */}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {features.map((feature, index) => (
             <FeatureCard
               key={feature.number}
@@ -367,12 +330,13 @@ export default function FeatureEngine() {
           ))}
         </div>
 
-        <div className="mt-6 flex items-center justify-between gap-4">
-          <p className="text-[10px] tracking-wide text-white/25">
+        {/* Section footer */}
+        <div className="mt-5 flex items-center justify-between gap-4 border-t border-white/[0.08] pt-4">
+          <p className="text-[9px] tracking-[0.12em] text-white/30">
             HOVER TO INTERACT · CLICK TO EXPLORE
           </p>
 
-          <span className="shrink-0 font-mono text-[10px] text-white/25">
+          <span className="shrink-0 font-mono text-[10px] text-cyan-200/50">
             05 CAPABILITIES
           </span>
         </div>

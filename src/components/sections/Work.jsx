@@ -46,7 +46,6 @@ const EASE = [0.22, 1, 0.36, 1];
 
 /* =====================================================
    PROJECT CARD
-   Defined OUTSIDE Work so it is never remounted.
 ===================================================== */
 
 const ProjectCard = ({ project, mobile }) => (
@@ -60,7 +59,10 @@ const ProjectCard = ({ project, mobile }) => (
     whileInView={mobile ? "active" : undefined}
     viewport={mobile ? { once: false, amount: 0.55 } : undefined}
     variants={{
-      rest: { scale: 1, boxShadow: "0 0 0 rgba(0,240,255,0)" },
+      rest: {
+        scale: 1,
+        boxShadow: "0 0 0 rgba(0,240,255,0)",
+      },
       active: {
         scale: 1.01,
         boxShadow:
@@ -163,6 +165,7 @@ const WorkMobile = () => (
     id="work"
     className="relative bg-[#050505] px-4 py-[80px] text-white sm:px-6 sm:py-[100px]"
   >
+    {/* HEADING */}
     <div className="mb-9 sm:mb-12">
       <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.25em] text-cyan-400/70 sm:text-xs">
         Selected work
@@ -175,6 +178,7 @@ const WorkMobile = () => (
       </h2>
     </div>
 
+    {/* PROJECT CARDS */}
     <div className="flex flex-col gap-4 sm:gap-5">
       {projects.map((project) => (
         <ProjectCard key={project.title} project={project} mobile />
@@ -229,14 +233,11 @@ const WorkDesktop = () => {
     offset: ["start start", "end end"],
   });
 
-  // Use actual scroll progress so the track reaches its exact
-  // final position before the pinned section releases.
   const x = useTransform(
     [scrollYProgress, distance],
     ([progress, maxDistance]) => -progress * maxDistance,
   );
 
-  // Vertical scroll distance matches the horizontal travel distance.
   const sectionHeight = useTransform(distance, (d) => `calc(100vh + ${d}px)`);
 
   return (
@@ -248,8 +249,8 @@ const WorkDesktop = () => {
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <div className="flex h-full w-full flex-col justify-center">
-          {/* INTRO */}
-          <div className="mx-auto mb-10 flex w-full max-w-[1200px] items-end justify-between px-6 lg:mb-12 lg:px-10">
+          {/* HEADING — SAME LEFT EDGE AS FIRST PROJECT CARD */}
+          <div className="mb-10 flex w-full items-end justify-between px-6 lg:mb-12 lg:px-10">
             <div>
               <p className="mb-5 font-mono text-xs uppercase tracking-[0.25em] text-cyan-400/70">
                 Selected work
@@ -266,9 +267,9 @@ const WorkDesktop = () => {
             </p>
           </div>
 
-          {/* VIEWPORT */}
+          {/* PROJECT VIEWPORT */}
           <div ref={viewportRef} className="relative w-full overflow-hidden">
-            {/* TRACK */}
+            {/* PROJECT TRACK */}
             <motion.div
               ref={trackRef}
               style={{ x }}
@@ -280,11 +281,14 @@ const WorkDesktop = () => {
             </motion.div>
           </div>
 
-          {/* SCROLL HINT */}
-          <div className="mx-auto mt-7 flex w-full max-w-[1200px] items-center justify-between px-6 lg:px-10">
+          {/* SCROLL HINT — SAME LEFT INSET */}
+          <div className="mt-7 flex w-full items-center justify-between px-6 lg:px-10">
             <div className="flex items-center gap-3">
               <motion.div
-                animate={{ width: [28, 48, 28], opacity: [0.25, 0.6, 0.25] }}
+                animate={{
+                  width: [28, 48, 28],
+                  opacity: [0.25, 0.6, 0.25],
+                }}
                 transition={{
                   duration: 2,
                   repeat: Infinity,

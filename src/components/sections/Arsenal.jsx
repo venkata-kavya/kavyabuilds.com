@@ -1,9 +1,6 @@
 import React, { useRef, useState } from "react";
-
 import { Canvas, useFrame } from "@react-three/fiber";
-
 import { Float, ContactShadows } from "@react-three/drei";
-
 import { motion, AnimatePresence } from "framer-motion";
 
 import {
@@ -42,7 +39,6 @@ const MobileLootCube = ({ onClick }) => {
       onPointerOut={() => (document.body.style.cursor = "auto")}
     >
       <boxGeometry args={[1.8, 1.8, 1.8]} />
-
       <meshBasicMaterial wireframe color="#00F0FF" />
     </mesh>
   );
@@ -100,7 +96,6 @@ const DesktopLootCube = ({ onClick, clicking }) => {
         {/* Outer wireframe */}
         <mesh ref={outerRef}>
           <boxGeometry args={[2.5, 2.5, 2.5]} />
-
           <meshBasicMaterial
             wireframe
             color="#00F0FF"
@@ -112,7 +107,6 @@ const DesktopLootCube = ({ onClick, clicking }) => {
         {/* Inner wireframe */}
         <mesh ref={innerRef}>
           <boxGeometry args={[1.5, 1.5, 1.5]} />
-
           <meshBasicMaterial
             wireframe
             color="#ffffff"
@@ -124,7 +118,6 @@ const DesktopLootCube = ({ onClick, clicking }) => {
         {/* Core */}
         <mesh ref={coreRef}>
           <boxGeometry args={[0.8, 0.8, 0.8]} />
-
           <meshStandardMaterial
             color="#00F0FF"
             emissive="#00F0FF"
@@ -229,7 +222,6 @@ const Arsenal = () => {
 
     setTimeout(() => {
       setLootIndex((prev) => (prev + 1) % inventory.length);
-
       setClicking(false);
     }, 220);
   };
@@ -277,33 +269,15 @@ const Arsenal = () => {
       </div>
 
       {/* ======================================================
-          THE STACK — ABOVE THE CUBE
+          THE STACK — ALIGNED TO SECTION EDGE
       ====================================================== */}
 
-      <div
-        className="
-    absolute
-    left-[236px]
-    top-10
-    z-30
-    flex
-    items-center
-    gap-4
-  "
-      >
-        <span
-          className="
-      whitespace-nowrap
-      font-mono
-      text-[11px]
-      uppercase
-      tracking-[0.35em]
-      text-cyan-400/70
-    "
-        >
+      <div className="absolute left-6 top-10 z-30 sm:left-8 lg:left-12">
+        <span className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.25em] text-cyan-400/70">
           THE STACK
         </span>
       </div>
+
       {/* ======================================================
           MAIN CONTENT
       ====================================================== */}
@@ -463,9 +437,7 @@ const Arsenal = () => {
             {/* Interaction */}
             <motion.button
               onClick={handleLoot}
-              animate={{
-                opacity: [0.35, 0.75, 0.35],
-              }}
+              animate={{ opacity: [0.35, 0.75, 0.35] }}
               transition={{
                 duration: 2.8,
                 repeat: Infinity,
@@ -488,9 +460,7 @@ const Arsenal = () => {
               "
             >
               <span className="hidden sm:inline">CLICK TO EXPLORE</span>
-
               <span className="sm:hidden">TAP TO EXPLORE</span>
-
               <span className="ml-2 text-cyan-400/60">→</span>
             </motion.button>
           </div>
@@ -643,19 +613,8 @@ const Arsenal = () => {
         </div>
       </div>
 
-      {/* ======================================================
-          BOTTOM RIGHT
-      ====================================================== */}
-
-      <div
-        className="
-          absolute
-          bottom-10
-          right-6
-          z-20
-          md:right-10
-        "
-      >
+      {/* Bottom right */}
+      <div className="absolute bottom-10 right-6 z-20 md:right-10">
         <span className="font-mono text-[7px] tracking-[0.3em] text-white/15">
           DIGITAL MATERIALS
         </span>
