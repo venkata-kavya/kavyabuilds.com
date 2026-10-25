@@ -63,17 +63,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : {}}
             className="mb-8"
-          >
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-              </span>
-              <span className="font-mono text-xs font-medium text-cyan-300 tracking-widest">
-                KAVYABUILDS
-              </span>
-            </div>
-          </motion.div>
+          ></motion.div>
 
           {/* Main Title */}
           <motion.h1

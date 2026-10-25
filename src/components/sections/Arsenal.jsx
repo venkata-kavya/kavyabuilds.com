@@ -426,9 +426,7 @@ const Arsenal = () => {
             </div>
 
             {/* Technical labels */}
-            <div className="absolute left-0 top-[8%] font-mono text-[7px] tracking-[0.3em] text-white/15">
-              OBJECT / 3D
-            </div>
+            <div className="absolute left-0 top-[8%] font-mono text-[7px] tracking-[0.3em] text-white/15"></div>
 
             <div className="absolute bottom-[10%] left-0 font-mono text-[7px] tracking-[0.3em] text-white/15">
               WEBGL

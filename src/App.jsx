@@ -52,9 +52,7 @@ export default function App() {
       <main className="relative z-10">
         <Hero />
         <Intro />
-        <Testimonials />
         <FeatureEngine />
-        <Arsenal />
         <Work />
         <Contact />
       </main>
